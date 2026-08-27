@@ -1,0 +1,47 @@
+'use client'
+
+import Image from 'next/image'
+import { Star } from 'lucide-react'
+import type { ReviewItem } from '@/lib/cms'
+import { VideoPlayer } from '@/components/media/VideoPlayer'
+
+export function ReviewCard({ review }: { review: ReviewItem }) {
+  return (
+    <div className="card-surface flex h-full flex-col p-5">
+      {review.type === 'video' ? (
+        <VideoPlayer
+          video={{
+            source: review.embedUrl ? 'embed' : 'upload',
+            media: review.video,
+            embedUrl: review.embedUrl,
+            caption: `${review.reviewerName} — video review`,
+          }}
+          className="aspect-video w-full"
+        />
+      ) : review.image?.url ? (
+        <div className="relative overflow-hidden rounded-xl bg-ink-800">
+          <Image
+            src={review.image.cardUrl || review.image.url}
+            alt={review.image.alt || `Review from ${review.reviewerName}`}
+            width={review.image.width || 800}
+            height={review.image.height || 600}
+            className="h-auto w-full object-contain"
+          />
+        </div>
+      ) : null}
+
+      <div className="mt-4 flex items-center justify-between gap-3">
+        <div>
+          <p className="text-sm font-semibold text-white">{review.reviewerName}</p>
+          {review.role && <p className="text-xs text-zinc-500">{review.role}</p>}
+        </div>
+        <div className="flex gap-0.5">
+          {Array.from({ length: review.rating }).map((_, i) => (
+            <Star key={i} className="h-3.5 w-3.5 text-amber-400" fill="currentColor" />
+          ))}
+        </div>
+      </div>
+      {review.quote && <p className="mt-3 text-sm leading-relaxed text-zinc-400">“{review.quote}”</p>}
+    </div>
+  )
+}

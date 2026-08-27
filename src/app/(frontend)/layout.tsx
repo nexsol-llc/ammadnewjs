@@ -1,0 +1,52 @@
+import type { Metadata, Viewport } from 'next'
+import { Inter, Space_Grotesk } from 'next/font/google'
+import { Header } from '@/components/layout/Header'
+import { Footer } from '@/components/layout/Footer'
+import { site } from '@/lib/site'
+import './globals.css'
+
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-space-grotesk',
+  display: 'swap',
+})
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || site.domain
+
+export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: site.title,
+    template: '%s · M. Ammad',
+  },
+  description: site.description,
+  openGraph: {
+    type: 'website',
+    siteName: 'M. Ammad — Affiliate & Influencer Marketing',
+    title: site.title,
+    description: site.description,
+    images: [{ url: '/profile.webp', width: 800, height: 800, alt: 'M. Ammad' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: site.title,
+    description: site.description,
+  },
+}
+
+export const viewport: Viewport = {
+  themeColor: '#05060a',
+}
+
+export default function FrontendLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
+      <body>
+        <Header />
+        <main>{children}</main>
+        <Footer />
+      </body>
+    </html>
+  )
+}
