@@ -10,15 +10,32 @@ export const site = {
   whatsappDisplay: '+92 309 9996576',
   linkedin: 'https://www.linkedin.com/in/affiliate-manager-ammad/',
   calendly:
-    'https://calendly.com/partner-ammadd/30min?background_color=05060a&text_color=ffffff&primary_color=22d3ee',
+    'https://calendly.com/partner-ammadd/30min?background_color=ffffff&text_color=0a0a14&primary_color=6d4aff',
 }
 
 export const nav = [
-  { label: 'Home', href: '/' },
   { label: 'Services', href: '/services' },
   { label: 'Case Studies', href: '/case-studies' },
+  { label: 'Testimonials', href: '/testimonials' },
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' },
+]
+
+/** Networks & platforms shown in the hero orbit and the calculator select. */
+export const networks = [
+  { name: 'Awin', color: '#ff6b00' },
+  { name: 'Impact.com', color: '#0b6bf2' },
+  { name: 'ShareASale', color: '#1ba0e1' },
+  { name: 'CJ Affiliate', color: '#00a0df' },
+  { name: 'Rakuten', color: '#bf0000' },
+  { name: 'ADCELL', color: '#e30613' },
+  { name: 'Daisycon', color: '#f39200' },
+  { name: 'Everflow', color: '#4f46e5' },
+  { name: 'PartnerStack', color: '#0f172a' },
+  { name: 'Refersion', color: '#ff5a5f' },
+  { name: 'Instagram', color: '#e1306c' },
+  { name: 'TikTok', color: '#fe2c55' },
+  { name: 'YouTube', color: '#ff0000' },
 ]
 
 export const brands = [
@@ -40,35 +57,54 @@ export const brands = [
   'Furtuna Skin',
 ]
 
-export const networks = ['Awin', 'Impact.com', 'ADCELL', 'Daisycon', 'Apollo', 'LinkedIn']
-
 export const headlineStats = [
   { value: 350, prefix: '$', suffix: 'K+', label: 'Tracked partner revenue' },
   { value: 30.7, prefix: '', suffix: 'x', label: 'Best campaign ROAS', decimals: 1 },
-  { value: 700, prefix: '', suffix: '+', label: 'Partners recruited & managed' },
+  { value: 700, prefix: '', suffix: '+', label: 'Partners recruited' },
   { value: 15, prefix: '', suffix: '+', label: 'Brands scaled worldwide' },
 ]
 
-export const processSteps = [
+/** The engagement road map — what happens, and when. */
+export const roadmap = [
   {
-    title: 'Audit & Strategy',
+    phase: 'Phase 01',
+    window: 'Days 1 – 14',
+    title: 'Audit & Blueprint',
     description:
-      'I dig into your margins, AOV, and competitors, then design a partner program built around your unit economics — commission tiers, tracking setup, and a recruitment map.',
+      'I pull apart your margins, AOV, and competitor programs, then design a partner program built around your actual unit economics.',
+    deliverables: ['Margin & AOV analysis', 'Network selection', 'Commission tier design', 'Recruitment target map'],
   },
   {
-    title: 'Launch & Infrastructure',
+    phase: 'Phase 02',
+    window: 'Days 15 – 30',
+    title: 'Build & Launch',
     description:
-      'Full setup on the right network — Awin, Impact.com, ADCELL, or Daisycon — with attribution tracking, creative assets, promo codes, and affiliate-facing landing pages.',
+      'Full technical setup on the right network, with attribution tracking that survives audits and creative assets partners actually want to use.',
+    deliverables: ['Network setup / migration', 'Attribution & tracking', 'Creative asset pack', 'Partner landing pages'],
   },
   {
+    phase: 'Phase 03',
+    window: 'Days 31 – 60',
     title: 'Recruit & Activate',
     description:
-      'Targeted outreach via Apollo and LinkedIn brings in vetted niche creators and publishers — not coupon scrapers. Activation campaigns get them selling in weeks, not months.',
+      'Targeted Apollo and LinkedIn outreach brings in vetted niche creators and publishers — not coupon scrapers — and gets them selling fast.',
+    deliverables: ['Outreach sequences', 'Partner vetting & onboarding', 'Promo codes & seeding', 'First-sale activation'],
   },
   {
-    title: 'Scale & Compound',
+    phase: 'Phase 04',
+    window: 'Days 61 – 90',
+    title: 'Optimise & Scale',
     description:
-      'Weekly reporting, seasonal campaign pushes, performance bonuses, and relationship management turn the channel into a compounding revenue engine you own.',
+      'Segment partners by performance, reward the top tier, cut the dead weight, and layer seasonal campaigns onto a program that now has momentum.',
+    deliverables: ['Performance tiering', 'Bonus structures', 'Seasonal campaigns', 'Weekly reporting cadence'],
+  },
+  {
+    phase: 'Phase 05',
+    window: 'Month 4 – 6+',
+    title: 'Compound',
+    description:
+      'The channel becomes an asset you own: partners keep publishing, ranking and selling while your CPA falls and revenue compounds month over month.',
+    deliverables: ['Partner retention', 'Content co-creation', 'New market expansion', 'Fraud & compliance guardrails'],
   },
 ]
 
@@ -79,41 +115,23 @@ export const faqs = [
   },
   {
     q: 'How fast will I see results?',
-    a: 'Most programs have their first vetted partners live within 30 days and meaningful revenue within 60–90 days. LightPath LED generated $19K in under 30 days of tracked activity; Even Skyn hit $15K in its first 90 days with a 30.7x ROAS.',
+    a: 'Most programs have their first vetted partners live within 30 days and meaningful revenue within 60–90 days. LightPath LED generated $19K in under 30 days of tracked activity; Even Skyn hit $15K in its first 90 days at a 30.7x ROAS.',
   },
   {
     q: 'Do I need an existing affiliate program?',
     a: 'No. I build programs from zero — network selection, commission structure, tracking, creatives, and recruitment. If you already have a program that is underperforming, I audit and restructure it instead.',
   },
   {
+    q: 'How accurate is the revenue calculator?',
+    a: 'It projects from real benchmarks across the programs in my case studies: partner traffic typically adds 8–45% incremental sessions and converts around 1.5x better than site average. It is a directional estimate, not a guarantee — on a call I will give you a far tighter number using your actual analytics.',
+  },
+  {
     q: 'Which networks and tools do you work with?',
-    a: 'Awin, Impact.com, ADCELL, and Daisycon for affiliate infrastructure, with Apollo and LinkedIn powering partner recruitment. For influencer campaigns I manage sourcing, negotiation, contracts, and content across Instagram, TikTok, and YouTube.',
+    a: 'Awin, Impact.com, ShareASale, CJ, Rakuten, ADCELL, and Daisycon for affiliate infrastructure, with Apollo and LinkedIn powering partner recruitment. For influencer campaigns I manage sourcing, negotiation, contracts, and content across Instagram, TikTok, and YouTube.',
   },
   {
     q: 'What does it cost?',
     a: 'Every engagement is scoped to your brand — program size, network fees, and goals all matter. Book a free growth call and you will get a clear, fixed proposal with projected ROAS before you commit to anything.',
-  },
-  {
-    q: 'What kind of brands do you work with?',
-    a: 'E-commerce and SaaS brands doing consistent monthly revenue who want a profitable channel beyond paid ads. I have scaled programs in beauty, fashion, food & beverage, photography, home appliances, B2B hardware, and more.',
-  },
-]
-
-export const painPoints = [
-  {
-    title: 'CPAs keep climbing',
-    description:
-      'Every year Meta and Google take a bigger cut of your margin. One brand I took over was paying $38 per acquisition on ads — partners brought that down to $14.',
-  },
-  {
-    title: 'You rent, never own',
-    description:
-      'Pause your ad spend and revenue stops the same day. An affiliate program is an asset: partners keep publishing, ranking, and selling while you sleep.',
-  },
-  {
-    title: 'No bandwidth to manage it',
-    description:
-      'Recruiting, vetting, activating, and paying hundreds of partners is a full-time job. That is exactly the job I do — so your team does not have to.',
   },
 ]
 
@@ -122,11 +140,11 @@ export const services = {
     title: 'Affiliate Program Management',
     tagline: 'A performance channel you only pay when it sells.',
     description:
-      'End-to-end affiliate program design, launch, and scaling on Awin, Impact.com, ADCELL, or Daisycon — from commission architecture to partner recruitment and monthly optimization.',
+      'End-to-end affiliate program design, launch, and scaling — from commission architecture to partner recruitment and monthly optimisation.',
     features: [
       'Program setup & network migration',
       'Tiered commission architecture',
-      'Partner recruitment & onboarding (Apollo + LinkedIn outreach)',
+      'Partner recruitment & onboarding',
       'Fraud detection & compliance',
       'Seasonal campaign planning',
       'Weekly performance reporting',
@@ -150,7 +168,7 @@ export const services = {
     {
       title: 'Partnership Management',
       description:
-        'Ongoing partner communication, commission management, retention, and performance optimization.',
+        'Ongoing partner communication, commission management, retention, and performance optimisation.',
     },
     {
       title: 'Influencer Outreach',
@@ -159,3 +177,10 @@ export const services = {
     },
   ],
 }
+
+export const aboutPoints = [
+  'Operator, not an agency — I run your program personally',
+  '10+ years across affiliate networks & creator partnerships',
+  'Programs live on Awin, Impact.com, ADCELL & Daisycon',
+  'Brands scaled across the US, UK, DACH and Benelux markets',
+]

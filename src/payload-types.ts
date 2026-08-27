@@ -71,6 +71,7 @@ export interface Config {
     categories: Category;
     reviews: Review;
     media: Media;
+    leads: Lead;
     'contact-submissions': ContactSubmission;
     users: User;
     'payload-kv': PayloadKv;
@@ -84,6 +85,7 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     reviews: ReviewsSelect<false> | ReviewsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    leads: LeadsSelect<false> | LeadsSelect<true>;
     'contact-submissions': ContactSubmissionsSelect<false> | ContactSubmissionsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -349,6 +351,41 @@ export interface Review {
   createdAt: string;
 }
 /**
+ * Captured from the revenue calculator — includes what the visitor entered and what was projected.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads".
+ */
+export interface Lead {
+  id: number;
+  name: string;
+  email: string;
+  websiteUrl?: string | null;
+  inputs?: {
+    monthlyVisitors?: number | null;
+    monthlyOrders?: number | null;
+    averageOrderValue?: number | null;
+    /**
+     * %
+     */
+    commissionRate?: number | null;
+    currency?: string | null;
+    network?: string | null;
+  };
+  projection?: {
+    projectedMonthlyRevenue?: number | null;
+    projectedAnnualRevenue?: number | null;
+    projectedOrders?: number | null;
+    commissionCost?: number | null;
+    netRevenue?: number | null;
+    roas?: number | null;
+    partners?: number | null;
+  };
+  source?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * Messages sent through the contact form.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -431,6 +468,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'leads';
+        value: number | Lead;
       } | null)
     | ({
         relationTo: 'contact-submissions';
@@ -621,6 +662,39 @@ export interface MediaSelect<T extends boolean = true> {
               filename?: T;
             };
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads_select".
+ */
+export interface LeadsSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  websiteUrl?: T;
+  inputs?:
+    | T
+    | {
+        monthlyVisitors?: T;
+        monthlyOrders?: T;
+        averageOrderValue?: T;
+        commissionRate?: T;
+        currency?: T;
+        network?: T;
+      };
+  projection?:
+    | T
+    | {
+        projectedMonthlyRevenue?: T;
+        projectedAnnualRevenue?: T;
+        projectedOrders?: T;
+        commissionCost?: T;
+        netRevenue?: T;
+        roas?: T;
+        partners?: T;
+      };
+  source?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -1,10 +1,10 @@
 import { Hero } from '@/components/sections/Hero'
 import { LogoMarquee } from '@/components/sections/LogoMarquee'
-import { PainSection } from '@/components/sections/PainSection'
+import { RevenueCalculator } from '@/components/sections/RevenueCalculator'
 import { ServicesSection } from '@/components/sections/ServicesSection'
+import { RoadmapSection } from '@/components/sections/RoadmapSection'
 import { StatsBand } from '@/components/sections/StatsBand'
 import { FeaturedCaseStudies } from '@/components/sections/FeaturedCaseStudies'
-import { ProcessSection } from '@/components/sections/ProcessSection'
 import { ReviewsSection } from '@/components/sections/ReviewsSection'
 import { AboutTeaser } from '@/components/sections/AboutTeaser'
 import { FAQSection } from '@/components/sections/FAQSection'
@@ -16,7 +16,7 @@ export const revalidate = 120
 export default async function HomePage() {
   const [featured, reviews] = await Promise.all([
     getCaseStudies({ featuredOnly: true, limit: 6 }),
-    getReviews({ featuredOnly: true, limit: 8 }),
+    getReviews({ featuredOnly: true, limit: 7 }),
   ])
   const studies = featured.length ? featured : await getCaseStudies({ limit: 6 })
 
@@ -24,12 +24,12 @@ export default async function HomePage() {
     <>
       <Hero />
       <LogoMarquee />
-      <PainSection />
+      <RevenueCalculator />
       <ServicesSection />
+      <RoadmapSection />
       <StatsBand />
       <FeaturedCaseStudies studies={studies} />
-      <ProcessSection />
-      <ReviewsSection reviews={reviews} />
+      <ReviewsSection reviews={reviews} alt={false} />
       <AboutTeaser />
       <FAQSection />
       <FinalCTA />

@@ -9,6 +9,8 @@ import { useState } from 'react'
 export function VideoPlayer({ video, className }: { video: VideoItem; className?: string }) {
   const [activated, setActivated] = useState(false)
 
+  const shell = 'overflow-hidden rounded-xl border border-line bg-surface-3'
+
   if (video.source === 'embed' && video.embedUrl) {
     const src = toEmbedSrc(video.embedUrl)
     const vertical = isVerticalEmbed(video.embedUrl)
@@ -18,16 +20,14 @@ export function VideoPlayer({ video, className }: { video: VideoItem; className?
           href={video.embedUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className={`card-surface flex aspect-video items-center justify-center gap-2 text-sm text-accent-400 hover:text-accent-500 ${className || ''}`}
+          className={`${shell} flex aspect-video items-center justify-center gap-2 text-sm font-semibold text-brand-600 ${className || ''}`}
         >
           <Play className="h-5 w-5" /> Watch video
         </a>
       )
     }
     return (
-      <div
-        className={`card-surface ${vertical ? 'aspect-[9/16] max-w-[340px]' : 'aspect-video'} ${className || ''}`}
-      >
+      <div className={`${shell} ${vertical ? 'aspect-[9/16] max-w-[340px]' : 'aspect-video'} ${className || ''}`}>
         <iframe
           src={src}
           className="h-full w-full"
@@ -42,13 +42,13 @@ export function VideoPlayer({ video, className }: { video: VideoItem; className?
 
   if (video.media?.url) {
     return (
-      <div className={`card-surface ${className || ''}`}>
+      <div className={`${shell} ${className || ''}`}>
         {activated ? (
           <video src={video.media.url} controls autoPlay playsInline className="h-full w-full object-contain" />
         ) : (
           <button
             onClick={() => setActivated(true)}
-            className="group relative flex h-full w-full items-center justify-center bg-ink-800"
+            className="group relative flex h-full w-full items-center justify-center"
             aria-label={`Play ${video.caption || 'video'}`}
           >
             <video
@@ -56,11 +56,11 @@ export function VideoPlayer({ video, className }: { video: VideoItem; className?
               preload="metadata"
               muted
               playsInline
-              className="h-full w-full object-cover opacity-70"
+              className="h-full w-full object-cover"
             />
-            <span className="absolute inset-0 flex items-center justify-center">
-              <span className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-accent-500 to-violet-500 shadow-[0_0_32px_rgba(34,211,238,0.5)] transition-transform duration-300 group-hover:scale-110">
-                <Play className="ml-1 h-7 w-7 text-white" fill="currentColor" />
+            <span className="absolute inset-0 flex items-center justify-center bg-ink-950/20 transition-colors group-hover:bg-ink-950/30">
+              <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-[0_10px_30px_-8px_rgba(16,16,40,0.5)] transition-transform duration-300 group-hover:scale-110">
+                <Play className="ml-1 h-6 w-6 text-brand-600" fill="currentColor" />
               </span>
             </span>
           </button>

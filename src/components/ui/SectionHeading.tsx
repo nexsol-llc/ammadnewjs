@@ -5,28 +5,34 @@ type Props = {
   title: React.ReactNode
   subtitle?: string
   align?: 'left' | 'center'
+  dark?: boolean
 }
 
-export function SectionHeading({ eyebrow, title, subtitle, align = 'center' }: Props) {
-  const alignCls = align === 'center' ? 'text-center items-center' : 'text-left items-start'
+export function SectionHeading({ eyebrow, title, subtitle, align = 'center', dark }: Props) {
+  const alignCls = align === 'center' ? 'items-center text-center' : 'items-start text-left'
   return (
-    <div className={`flex flex-col gap-4 ${alignCls} mb-12 md:mb-16`}>
+    <div className={`mb-12 flex flex-col gap-4 md:mb-16 ${alignCls}`}>
       {eyebrow && (
         <Reveal>
-          <span className="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs font-medium uppercase tracking-[0.18em] text-accent-400">
-            <span className="h-1.5 w-1.5 rounded-full bg-accent-400 animate-pulse" />
-            {eyebrow}
-          </span>
+          <span className={dark ? 'pill-dark' : 'pill'}>{eyebrow}</span>
         </Reveal>
       )}
       <Reveal delay={0.08}>
-        <h2 className="font-display text-3xl font-semibold leading-tight text-gradient-white sm:text-4xl md:text-5xl text-balance">
+        <h2
+          className={`heading text-3xl leading-[1.12] text-balance sm:text-4xl md:text-[2.9rem] ${
+            dark ? 'text-white' : ''
+          }`}
+        >
           {title}
         </h2>
       </Reveal>
       {subtitle && (
         <Reveal delay={0.16}>
-          <p className={`max-w-2xl text-base text-zinc-400 sm:text-lg ${align === 'center' ? 'mx-auto' : ''}`}>
+          <p
+            className={`max-w-2xl text-base leading-relaxed sm:text-lg ${
+              dark ? 'text-white/60' : 'text-ink-500'
+            } ${align === 'center' ? 'mx-auto' : ''}`}
+          >
             {subtitle}
           </p>
         </Reveal>

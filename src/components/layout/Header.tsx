@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { AnimatePresence, motion, useScroll, useSpring } from 'framer-motion'
 import { useEffect, useState } from 'react'
-import { ArrowUpRight, Menu, X } from 'lucide-react'
+import { ArrowRight, Menu, X } from 'lucide-react'
 import { nav, site } from '@/lib/site'
 
 export function Header() {
@@ -16,15 +16,13 @@ export function Header() {
   const progress = useSpring(scrollYProgress, { stiffness: 140, damping: 26, restDelta: 0.001 })
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24)
+    const onScroll = () => setScrolled(window.scrollY > 20)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  useEffect(() => {
-    setOpen(false)
-  }, [pathname])
+  useEffect(() => setOpen(false), [pathname])
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
@@ -36,35 +34,34 @@ export function Header() {
   return (
     <>
       <motion.div
-        className="fixed inset-x-0 top-0 z-[60] h-[2px] origin-left bg-gradient-to-r from-accent-400 to-violet-500"
+        className="fixed inset-x-0 top-0 z-[60] h-0.5 origin-left bg-gradient-to-r from-brand-500 to-fuchsia-500"
         style={{ scaleX: progress }}
       />
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-          scrolled ? 'border-b border-white/8 bg-ink-950/80 backdrop-blur-xl' : 'bg-transparent'
+          scrolled ? 'border-b border-line bg-white/85 backdrop-blur-xl' : 'bg-transparent'
         }`}
       >
         <div className="container-x flex h-16 items-center justify-between md:h-[4.5rem]">
-          <Link href="/" className="font-display text-lg font-bold tracking-tight text-white">
-            M<span className="text-gradient">.</span>AMMAD
+          <Link href="/" className="heading text-lg tracking-tight">
+            M<span className="text-brand-500">.</span>AMMAD
           </Link>
 
           <nav className="hidden items-center gap-1 md:flex">
             {nav.map((item) => {
-              const active =
-                item.href === '/' ? pathname === '/' : pathname.startsWith(item.href)
+              const active = pathname.startsWith(item.href)
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`relative rounded-full px-4 py-2 text-sm transition-colors ${
-                    active ? 'text-white' : 'text-zinc-400 hover:text-white'
+                  className={`relative rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                    active ? 'text-ink-950' : 'text-ink-500 hover:text-ink-950'
                   }`}
                 >
                   {active && (
                     <motion.span
                       layoutId="nav-pill"
-                      className="absolute inset-0 rounded-full bg-white/8"
+                      className="absolute inset-0 rounded-full bg-surface-3"
                       transition={{ type: 'spring', stiffness: 350, damping: 30 }}
                     />
                   )}
@@ -74,22 +71,25 @@ export function Header() {
             })}
           </nav>
 
-          <div className="hidden md:block">
+          <div className="hidden items-center gap-2 md:flex">
+            <Link href="/#revenue-calculator" className="btn btn-ghost !px-5 !py-2.5 text-sm">
+              Free calculator
+            </Link>
             <a
               href={site.calendly}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-accent-500 to-violet-500 px-5 py-2.5 text-sm font-semibold text-white shadow-[0_0_22px_rgba(34,211,238,0.25)] transition-shadow hover:shadow-[0_0_34px_rgba(139,92,246,0.4)]"
+              className="btn btn-primary !px-5 !py-2.5 text-sm"
             >
               Book a Call
-              <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              <ArrowRight className="h-3.5 w-3.5" />
             </a>
           </div>
 
           <button
             onClick={() => setOpen((v) => !v)}
             aria-label="Toggle menu"
-            className="glass rounded-full p-2.5 text-white md:hidden"
+            className="rounded-full border border-line bg-white p-2.5 text-ink-950 md:hidden"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -102,46 +102,46 @@ export function Header() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-40 bg-ink-950/95 backdrop-blur-2xl md:hidden"
+            transition={{ duration: 0.22 }}
+            className="fixed inset-0 z-40 bg-white/97 backdrop-blur-2xl md:hidden"
           >
             <motion.nav
               initial="hidden"
               animate="show"
-              variants={{ hidden: {}, show: { transition: { staggerChildren: 0.07, delayChildren: 0.1 } } }}
-              className="flex h-full flex-col items-center justify-center gap-2 px-8"
+              variants={{ hidden: {}, show: { transition: { staggerChildren: 0.06, delayChildren: 0.08 } } }}
+              className="flex h-full flex-col items-center justify-center gap-1 px-8"
             >
               {nav.map((item) => (
                 <motion.div
                   key={item.href}
                   variants={{
-                    hidden: { opacity: 0, y: 24 },
-                    show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+                    hidden: { opacity: 0, y: 20 },
+                    show: { opacity: 1, y: 0, transition: { duration: 0.35 } },
                   }}
                 >
-                  <Link
-                    href={item.href}
-                    className="font-display block py-3 text-3xl font-semibold text-white"
-                  >
+                  <Link href={item.href} className="heading block py-3 text-3xl">
                     {item.label}
                   </Link>
                 </motion.div>
               ))}
               <motion.div
                 variants={{
-                  hidden: { opacity: 0, y: 24 },
-                  show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+                  hidden: { opacity: 0, y: 20 },
+                  show: { opacity: 1, y: 0, transition: { duration: 0.35 } },
                 }}
-                className="mt-6"
+                className="mt-8 flex flex-col gap-3"
               >
+                <Link href="/#revenue-calculator" className="btn btn-ghost">
+                  Free revenue calculator
+                </Link>
                 <a
                   href={site.calendly}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-accent-500 to-violet-500 px-8 py-4 text-base font-semibold text-white"
+                  className="btn btn-primary"
                 >
                   Book a Free Growth Call
-                  <ArrowUpRight className="h-5 w-5" />
+                  <ArrowRight className="h-4 w-4" />
                 </a>
               </motion.div>
             </motion.nav>

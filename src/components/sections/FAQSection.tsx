@@ -12,7 +12,7 @@ export function FAQSection() {
 
   return (
     <section className="relative py-24 md:py-32">
-      <div className="container-x max-w-4xl">
+      <div className="container-x max-w-3xl">
         <SectionHeading
           eyebrow="FAQ"
           title={
@@ -21,14 +21,14 @@ export function FAQSection() {
             </>
           }
         />
-        <div className="space-y-4">
+        <div className="space-y-3">
           {faqs.map((f, i) => {
             const isOpen = open === i
             return (
-              <Reveal key={f.q} delay={i * 0.05}>
+              <Reveal key={f.q} delay={i * 0.04}>
                 <div
-                  className={`card-surface transition-colors duration-300 ${
-                    isOpen ? 'border-accent-500/30' : 'hover:border-white/16'
+                  className={`card overflow-hidden transition-colors duration-300 ${
+                    isOpen ? '!border-brand-200' : ''
                   }`}
                 >
                   <button
@@ -36,14 +36,12 @@ export function FAQSection() {
                     className="flex w-full items-center justify-between gap-4 p-6 text-left"
                     aria-expanded={isOpen}
                   >
-                    <span className="font-display text-base font-semibold text-white md:text-lg">
-                      {f.q}
-                    </span>
+                    <span className="heading text-base md:text-lg">{f.q}</span>
                     <motion.span
                       animate={{ rotate: isOpen ? 45 : 0 }}
                       transition={{ duration: 0.25 }}
                       className={`shrink-0 rounded-full p-1.5 ${
-                        isOpen ? 'bg-accent-500/15 text-accent-400' : 'bg-white/6 text-zinc-400'
+                        isOpen ? 'bg-brand-50 text-brand-600' : 'bg-surface-3 text-ink-400'
                       }`}
                     >
                       <Plus className="h-4 w-4" />
@@ -55,10 +53,10 @@ export function FAQSection() {
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.32, ease: [0.21, 0.6, 0.35, 1] }}
+                        transition={{ duration: 0.3, ease: [0.21, 0.6, 0.35, 1] }}
                         className="overflow-hidden"
                       >
-                        <p className="px-6 pb-6 text-sm leading-relaxed text-zinc-400">{f.a}</p>
+                        <p className="px-6 pb-6 text-sm leading-relaxed text-ink-500">{f.a}</p>
                       </motion.div>
                     )}
                   </AnimatePresence>
