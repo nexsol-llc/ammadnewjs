@@ -24,3 +24,7 @@ payload.db-*
 # misc
 .DS_Store
 *.tsbuildinfo
+
+# local screenshots / scratch scripts
+/*.png
+/*.mjs
