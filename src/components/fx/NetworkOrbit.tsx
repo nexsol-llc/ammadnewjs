@@ -5,13 +5,6 @@ import { useEffect, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import type { NetworkInfo } from '@/lib/cms'
 
-/** "ShareASale" → "SA", "Awin" → "A", "CJ Affiliate" → "CJ" */
-function monogram(name: string) {
-  const caps = name.replace(/\.com$/i, '').match(/[A-Z]/g)
-  if (caps && caps.length >= 2) return caps.slice(0, 2).join('')
-  return name.charAt(0).toUpperCase()
-}
-
 /**
  * Circular network slider: two counter-rotating rings of name chips around a
  * centre that showcases each network's logo in turn.
@@ -63,42 +56,37 @@ export function NetworkOrbit({ networks }: { networks: NetworkInfo[] }) {
 
       {/* Centre — the logo showcase */}
       <div className="absolute inset-[30%] flex items-center justify-center">
-        <div className="card relative flex h-full w-full flex-col items-center justify-center gap-2 rounded-full px-6 text-center shadow-[0_20px_60px_-20px_rgba(91,51,245,0.45)]">
+        <div className="card relative flex h-full w-full items-center justify-center rounded-full px-5 text-center shadow-[0_20px_60px_-20px_rgba(91,51,245,0.45)]">
           <span
             className="absolute inset-0 animate-pulse-ring rounded-full border-2"
             style={{ borderColor: current.color }}
             aria-hidden
           />
-          <p className="text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-ink-400">
-            Now managing
-          </p>
-
           <motion.div
             key={current.id}
-            initial={reduce ? false : { opacity: 0, scale: 0.9 }}
+            initial={reduce ? false : { opacity: 0, scale: 0.92 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.45, ease: [0.21, 0.6, 0.35, 1] }}
-            className="flex flex-col items-center gap-1.5"
+            className="flex w-full items-center justify-center px-2"
           >
             {current.logo?.url ? (
               <Image
                 src={current.logo.url}
                 alt={current.name}
-                width={220}
-                height={80}
-                className="h-9 w-auto max-w-[8.5rem] object-contain sm:h-11"
+                width={320}
+                height={120}
+                priority
+                className="h-auto max-h-[3.4rem] w-auto max-w-[9.5rem] object-contain sm:max-h-[4.2rem] sm:max-w-[11rem]"
                 unoptimized={current.logo.mimeType === 'image/svg+xml'}
               />
             ) : (
-              <>
-                <span
-                  className="flex h-11 w-11 items-center justify-center rounded-2xl text-base font-bold text-white sm:h-12 sm:w-12"
-                  style={{ background: current.color }}
-                >
-                  {monogram(current.name)}
-                </span>
-                <span className="heading text-sm leading-tight sm:text-base">{current.name}</span>
-              </>
+              // Until the official logo is uploaded, show the name as a wordmark.
+              <span
+                className="heading text-center text-xl leading-tight sm:text-2xl"
+                style={{ color: current.color }}
+              >
+                {current.name}
+              </span>
             )}
           </motion.div>
         </div>
