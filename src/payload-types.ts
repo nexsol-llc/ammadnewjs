@@ -351,7 +351,7 @@ export interface Review {
   createdAt: string;
 }
 /**
- * Captured from the revenue calculator — includes what the visitor entered and what was projected.
+ * Every revenue-calculator submission: who they are, exactly what they entered, and the projection they were shown.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "leads".
@@ -361,13 +361,14 @@ export interface Lead {
   name: string;
   email: string;
   websiteUrl?: string | null;
+  /**
+   * Auto-generated from the entries below — this is the column shown in the list.
+   */
+  summary?: string | null;
   inputs?: {
     monthlyVisitors?: number | null;
     monthlyOrders?: number | null;
     averageOrderValue?: number | null;
-    /**
-     * %
-     */
     commissionRate?: number | null;
     currency?: string | null;
     network?: string | null;
@@ -381,6 +382,14 @@ export interface Lead {
     roas?: number | null;
     partners?: number | null;
   };
+  /**
+   * Your own pipeline status.
+   */
+  status?: ('new' | 'contacted' | 'qualified' | 'call-booked' | 'not-a-fit') | null;
+  /**
+   * Private notes — never shown on the site.
+   */
+  notes?: string | null;
   source?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -671,6 +680,7 @@ export interface LeadsSelect<T extends boolean = true> {
   name?: T;
   email?: T;
   websiteUrl?: T;
+  summary?: T;
   inputs?:
     | T
     | {
@@ -692,6 +702,8 @@ export interface LeadsSelect<T extends boolean = true> {
         roas?: T;
         partners?: T;
       };
+  status?: T;
+  notes?: T;
   source?: T;
   updatedAt?: T;
   createdAt?: T;
