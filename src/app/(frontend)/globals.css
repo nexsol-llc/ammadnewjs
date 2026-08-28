@@ -35,8 +35,12 @@
 
   --animate-marquee: marquee 46s linear infinite;
   --animate-marquee-slow: marquee 72s linear infinite;
-  --animate-orbit: orbit 44s linear infinite;
-  --animate-orbit-rev: orbit-rev 34s linear infinite;
+  /* Ring spin + its exact counter-spin. Durations MUST match per pair so the
+     chip labels cancel the ring rotation and stay upright. */
+  --animate-orbit-outer: orbit 48s linear infinite;
+  --animate-orbit-outer-rev: orbit-rev 48s linear infinite;
+  --animate-orbit-inner: orbit-rev 38s linear infinite;
+  --animate-orbit-inner-rev: orbit 38s linear infinite;
   --animate-float: float 7s ease-in-out infinite;
   --animate-caret: caret 1.05s step-end infinite;
   --animate-pulse-ring: pulse-ring 3.2s ease-out infinite;
@@ -384,8 +388,10 @@ input[type='range']::-moz-range-thumb {
   }
   .animate-marquee,
   .animate-marquee-slow,
-  .animate-orbit,
-  .animate-orbit-rev,
+  .animate-orbit-outer,
+  .animate-orbit-outer-rev,
+  .animate-orbit-inner,
+  .animate-orbit-inner-rev,
   .animate-float,
   .animate-pulse-ring {
     animation: none !important;

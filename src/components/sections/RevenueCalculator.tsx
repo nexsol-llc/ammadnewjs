@@ -12,7 +12,8 @@ import {
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { calculate, formatMoney, formatNumber, type CalcResult, type Currency } from '@/lib/calculator'
-import { networks, site } from '@/lib/site'
+import { networks as staticNetworks, site } from '@/lib/site'
+import type { NetworkInfo } from '@/lib/cms'
 
 type Form = {
   websiteUrl: string
@@ -34,8 +35,9 @@ const initialForm: Form = {
   network: '',
 }
 
-export function RevenueCalculator() {
+export function RevenueCalculator({ networks = [] }: { networks?: NetworkInfo[] }) {
   const reduce = useReducedMotion()
+  const networkOptions = networks.length ? networks : staticNetworks
   const [form, setForm] = useState<Form>(initialForm)
   const [modalOpen, setModalOpen] = useState(false)
   const [lead, setLead] = useState({ name: '', email: '' })
@@ -258,7 +260,7 @@ export function RevenueCalculator() {
                   <option value="" className="bg-ink-900">
                     Not on a network yet
                   </option>
-                  {networks.slice(0, 10).map((n) => (
+                  {networkOptions.map((n) => (
                     <option key={n.name} value={n.name} className="bg-ink-900">
                       {n.name}
                     </option>

@@ -9,22 +9,23 @@ import { ReviewsSection } from '@/components/sections/ReviewsSection'
 import { AboutTeaser } from '@/components/sections/AboutTeaser'
 import { FAQSection } from '@/components/sections/FAQSection'
 import { FinalCTA } from '@/components/sections/FinalCTA'
-import { getCaseStudies, getReviews } from '@/lib/cms'
+import { getCaseStudies, getNetworks, getReviews } from '@/lib/cms'
 
 export const revalidate = 120
 
 export default async function HomePage() {
-  const [featured, reviews] = await Promise.all([
+  const [featured, reviews, networks] = await Promise.all([
     getCaseStudies({ featuredOnly: true, limit: 6 }),
     getReviews({ featuredOnly: true, limit: 7 }),
+    getNetworks(),
   ])
   const studies = featured.length ? featured : await getCaseStudies({ limit: 6 })
 
   return (
     <>
-      <Hero />
+      <Hero networks={networks} />
       <LogoMarquee />
-      <RevenueCalculator />
+      <RevenueCalculator networks={networks} />
       <ServicesSection />
       <RoadmapSection />
       <StatsBand />

@@ -253,3 +253,32 @@ export async function getReviews(opts?: {
     return []
   }
 }
+
+export type NetworkInfo = {
+  id: string
+  name: string
+  color: string
+  logo?: MediaInfo
+}
+
+export async function getNetworks(): Promise<NetworkInfo[]> {
+  try {
+    const payload = await cms()
+    const res = await payload.find({
+      collection: 'networks',
+      where: { active: { equals: true } },
+      sort: 'order',
+      depth: 1,
+      limit: 60,
+    })
+    return res.docs.map((n: any) => ({
+      id: String(n.id),
+      name: n.name,
+      color: n.color || '#6d4aff',
+      logo: mapMedia(n.logo),
+    }))
+  } catch (err) {
+    console.error('getNetworks failed:', err)
+    return []
+  }
+}

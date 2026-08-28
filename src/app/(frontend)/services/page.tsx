@@ -7,7 +7,8 @@ import { RoadmapSection } from '@/components/sections/RoadmapSection'
 import { StatsBand } from '@/components/sections/StatsBand'
 import { FAQSection } from '@/components/sections/FAQSection'
 import { FinalCTA } from '@/components/sections/FinalCTA'
-import { networks, site } from '@/lib/site'
+import { networks as staticNetworks, site } from '@/lib/site'
+import { getNetworks } from '@/lib/cms'
 
 export const metadata: Metadata = {
   title: 'Services',
@@ -22,7 +23,11 @@ const comparisons = [
   { them: '12-month lock-in contracts', me: 'Earn-your-stay engagements' },
 ]
 
-export default function ServicesPage() {
+export const revalidate = 120
+
+export default async function ServicesPage() {
+  const cmsNetworks = await getNetworks()
+  const networks = cmsNetworks.length ? cmsNetworks : staticNetworks
   return (
     <>
       <section className="relative overflow-hidden pt-36 pb-8 md:pt-44">

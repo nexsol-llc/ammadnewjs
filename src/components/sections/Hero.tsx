@@ -6,6 +6,7 @@ import { NetworkOrbit } from '@/components/fx/NetworkOrbit'
 import { MagneticButton } from '@/components/ui/Buttons'
 import { Typewriter } from '@/components/ui/Typewriter'
 import { heroCategories, site } from '@/lib/site'
+import type { NetworkInfo } from '@/lib/cms'
 
 const proof = [
   { value: '$350K+', label: 'Partner revenue tracked' },
@@ -13,7 +14,7 @@ const proof = [
   { value: '700+', label: 'Partners recruited' },
 ]
 
-export function Hero() {
+export function Hero({ networks }: { networks: NetworkInfo[] }) {
   const reduce = useReducedMotion()
   const rise = (delay: number) => ({
     initial: reduce ? false : { opacity: 0, y: 22 },
@@ -106,7 +107,7 @@ export function Hero() {
             transition={{ duration: 0.9, delay: 0.2, ease: [0.21, 0.6, 0.35, 1] }}
             className="relative"
           >
-            <NetworkOrbit />
+            <NetworkOrbit networks={networks} />
             <p className="mt-6 text-center text-xs uppercase tracking-[0.18em] text-ink-400">
               Networks & platforms I run programs on
             </p>

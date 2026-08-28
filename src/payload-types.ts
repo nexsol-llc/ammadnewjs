@@ -70,6 +70,7 @@ export interface Config {
     'case-studies': CaseStudy;
     categories: Category;
     reviews: Review;
+    networks: Network;
     media: Media;
     leads: Lead;
     'contact-submissions': ContactSubmission;
@@ -84,6 +85,7 @@ export interface Config {
     'case-studies': CaseStudiesSelect<false> | CaseStudiesSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     reviews: ReviewsSelect<false> | ReviewsSelect<true>;
+    networks: NetworksSelect<false> | NetworksSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     leads: LeadsSelect<false> | LeadsSelect<true>;
     'contact-submissions': ContactSubmissionsSelect<false> | ContactSubmissionsSelect<true>;
@@ -351,6 +353,34 @@ export interface Review {
   createdAt: string;
 }
 /**
+ * Affiliate networks & creator platforms shown in the hero circle. Upload each official logo — it appears in the middle of the circle. Without a logo, a coloured monogram is shown instead.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "networks".
+ */
+export interface Network {
+  id: number;
+  name: string;
+  /**
+   * Official logo. SVG or transparent PNG works best — wide/horizontal lockups look right in the circle.
+   */
+  logo?: (number | null) | Media;
+  /**
+   * Brand hex colour, e.g. #ff6b00
+   */
+  color?: string | null;
+  /**
+   * Lower numbers appear first.
+   */
+  order?: number | null;
+  /**
+   * Show in the hero circle.
+   */
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * Every revenue-calculator submission: who they are, exactly what they entered, and the projection they were shown.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -473,6 +503,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'reviews';
         value: number | Review;
+      } | null)
+    | ({
+        relationTo: 'networks';
+        value: number | Network;
       } | null)
     | ({
         relationTo: 'media';
@@ -617,6 +651,19 @@ export interface ReviewsSelect<T extends boolean = true> {
   videoSource?: T;
   video?: T;
   embedUrl?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "networks_select".
+ */
+export interface NetworksSelect<T extends boolean = true> {
+  name?: T;
+  logo?: T;
+  color?: T;
+  order?: T;
+  active?: T;
   updatedAt?: T;
   createdAt?: T;
 }
