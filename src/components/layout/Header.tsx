@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { AnimatePresence, motion, useScroll, useSpring } from 'framer-motion'
@@ -48,8 +49,18 @@ export function Header() {
                 : 'border-line shadow-[0_6px_26px_-14px_rgba(16,16,40,0.18)]'
             }`}
           >
-            <Link href="/" className="heading shrink-0 py-3 text-lg tracking-tight">
-              M<span className="text-brand-500">.</span>AMMAD
+            <Link href="/" className="flex shrink-0 items-center gap-2.5 py-2">
+              <Image
+                src="/avatar.webp"
+                alt=""
+                width={80}
+                height={80}
+                priority
+                className="h-9 w-9 rounded-full object-cover ring-2 ring-brand-100"
+              />
+              <span className="heading text-lg tracking-tight">
+                M<span className="text-brand-500">.</span>AMMAD
+              </span>
             </Link>
 
             <nav className="hidden items-center gap-0.5 lg:flex">

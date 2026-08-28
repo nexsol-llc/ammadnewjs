@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, Linkedin, Mail, MessageCircle } from 'lucide-react'
 import { nav, site } from '@/lib/site'
@@ -8,8 +9,17 @@ export function Footer() {
       <div className="container-x py-14 md:py-20">
         <div className="grid gap-12 md:grid-cols-[1.5fr_1fr_1fr]">
           <div>
-            <Link href="/" className="heading text-xl tracking-tight">
-              M<span className="text-brand-500">.</span>AMMAD
+            <Link href="/" className="inline-flex items-center gap-2.5">
+              <Image
+                src="/avatar.webp"
+                alt=""
+                width={80}
+                height={80}
+                className="h-10 w-10 rounded-full object-cover ring-2 ring-brand-100"
+              />
+              <span className="heading text-xl tracking-tight">
+                M<span className="text-brand-500">.</span>AMMAD
+              </span>
             </Link>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-ink-500">
               Affiliate & influencer marketing for e-commerce and SaaS brands. Partnerships that
