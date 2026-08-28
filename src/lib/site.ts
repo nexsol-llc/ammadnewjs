@@ -21,6 +21,22 @@ export const nav = [
   { label: 'Contact', href: '/contact' },
 ]
 
+/** Industry categories that type out one by one in the hero headline. Edit freely. */
+export const heroCategories = [
+  'e-commerce',
+  'SaaS',
+  'skincare',
+  'health & fitness',
+  'fashion',
+  'beauty',
+  'food & beverage',
+  'home & furniture',
+  'smart home',
+  'baby care',
+  'B2B & industrial',
+  'luxury',
+]
+
 /** Networks & platforms shown in the hero orbit and the calculator select. */
 export const networks = [
   { name: 'Awin', color: '#ff6b00' },

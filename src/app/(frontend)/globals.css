@@ -38,6 +38,7 @@
   --animate-orbit: orbit 44s linear infinite;
   --animate-orbit-rev: orbit-rev 34s linear infinite;
   --animate-float: float 7s ease-in-out infinite;
+  --animate-caret: caret 1.05s step-end infinite;
   --animate-pulse-ring: pulse-ring 3.2s ease-out infinite;
 
   @keyframes marquee {
@@ -62,6 +63,15 @@
     }
     to {
       transform: rotate(0deg);
+    }
+  }
+  @keyframes caret {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
     }
   }
   @keyframes float {

@@ -4,7 +4,8 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowRight, Calculator, Star } from 'lucide-react'
 import { NetworkOrbit } from '@/components/fx/NetworkOrbit'
 import { MagneticButton } from '@/components/ui/Buttons'
-import { site } from '@/lib/site'
+import { Typewriter } from '@/components/ui/Typewriter'
+import { heroCategories, site } from '@/lib/site'
 
 const proof = [
   { value: '$350K+', label: 'Partner revenue tracked' },
@@ -41,11 +42,17 @@ export function Hero() {
 
             <motion.h1
               {...rise(0.08)}
+              aria-label="The partner growth engine for e-commerce, SaaS and DTC brands"
               className="heading mt-7 text-[2.6rem] leading-[1.06] sm:text-6xl lg:text-[4rem]"
             >
-              The partner growth engine for{' '}
-              <span className="text-gradient whitespace-nowrap">e-commerce</span>{' '}
-              <span className="text-gradient">& SaaS</span> brands
+              <span aria-hidden="true">
+                The partner growth engine for{' '}
+                {/* Two lines are reserved so the layout never jumps between short
+                    words ('SaaS') and long ones ('health & fitness'). */}
+                <span className="block min-h-[2.12em]">
+                  <Typewriter words={heroCategories} className="text-gradient" /> brands
+                </span>
+              </span>
             </motion.h1>
 
             <motion.p
