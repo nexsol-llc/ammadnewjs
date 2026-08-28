@@ -25,6 +25,8 @@ payload.db-*
 .DS_Store
 *.tsbuildinfo
 
-# local screenshots / scratch scripts
+# local screenshots / scratch scripts (never the build configs)
 /*.png
 /*.mjs
+!next.config.mjs
+!postcss.config.mjs
