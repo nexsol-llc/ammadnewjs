@@ -73,7 +73,7 @@ export function Header() {
 
           <div className="hidden items-center gap-2 md:flex">
             <Link href="/#revenue-calculator" className="btn btn-ghost !px-5 !py-2.5 text-sm">
-              Free calculator
+              Estimate Revenue
             </Link>
             <a
               href={site.calendly}
@@ -132,7 +132,7 @@ export function Header() {
                 className="mt-8 flex flex-col gap-3"
               >
                 <Link href="/#revenue-calculator" className="btn btn-ghost">
-                  Free revenue calculator
+                  Estimate Revenue
                 </Link>
                 <a
                   href={site.calendly}
