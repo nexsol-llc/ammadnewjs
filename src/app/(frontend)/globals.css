@@ -43,6 +43,8 @@
   --animate-orbit-inner-rev: orbit 38s linear infinite;
   --animate-float: float 7s ease-in-out infinite;
   --animate-caret: caret 1.05s step-end infinite;
+  --animate-burn: burn 3.4s ease-in-out infinite;
+  --animate-ember: ember-rise 5s linear infinite;
   --animate-pulse-ring: pulse-ring 3.2s ease-out infinite;
 
   @keyframes marquee {
@@ -67,6 +69,28 @@
     }
     to {
       transform: rotate(0deg);
+    }
+  }
+  @keyframes burn {
+    0%,
+    100% {
+      background-position: 50% 12%;
+    }
+    50% {
+      background-position: 50% 88%;
+    }
+  }
+  @keyframes ember-rise {
+    0% {
+      transform: translateY(0) scale(1);
+      opacity: 0;
+    }
+    12% {
+      opacity: 0.85;
+    }
+    100% {
+      transform: translateY(-150px) scale(0.35);
+      opacity: 0;
     }
   }
   @keyframes caret {
@@ -382,6 +406,31 @@ input[type='range']::-moz-range-thumb {
   cursor: pointer;
 }
 
+/* ── Services hero: burning headline ───────────────────────── */
+
+@utility text-burning {
+  background-image: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    #ffffff 42%,
+    #fed7aa 62%,
+    #fb923c 78%,
+    #f97316 100%
+  );
+  background-size: 100% 320%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 18px rgba(249, 115, 22, 0.28));
+}
+
+@utility mesh-ember {
+  background-image:
+    radial-gradient(42rem 26rem at 50% 8%, rgba(249, 115, 22, 0.18), transparent 62%),
+    radial-gradient(34rem 22rem at 18% 78%, rgba(220, 38, 38, 0.14), transparent 60%),
+    radial-gradient(30rem 20rem at 86% 70%, rgba(251, 146, 60, 0.12), transparent 60%);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -393,6 +442,9 @@ input[type='range']::-moz-range-thumb {
   .animate-orbit-inner,
   .animate-orbit-inner-rev,
   .animate-float,
+  .animate-burn,
+  .animate-ember,
+  .animate-caret,
   .animate-pulse-ring {
     animation: none !important;
   }

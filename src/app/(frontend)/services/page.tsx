@@ -1,13 +1,14 @@
 import type { Metadata } from 'next'
-import { ArrowRight, Check, X } from 'lucide-react'
+import { Check, X } from 'lucide-react'
 import { Reveal, Stagger, StaggerItem } from '@/components/ui/Reveal'
 import { SectionHeading } from '@/components/ui/SectionHeading'
+import { ServicesHero } from '@/components/sections/ServicesHero'
 import { ServicesSection } from '@/components/sections/ServicesSection'
 import { RoadmapSection } from '@/components/sections/RoadmapSection'
 import { StatsBand } from '@/components/sections/StatsBand'
 import { FAQSection } from '@/components/sections/FAQSection'
 import { FinalCTA } from '@/components/sections/FinalCTA'
-import { networks as staticNetworks, site } from '@/lib/site'
+import { networks as staticNetworks } from '@/lib/site'
 import { getNetworks } from '@/lib/cms'
 
 export const metadata: Metadata = {
@@ -30,39 +31,7 @@ export default async function ServicesPage() {
   const networks = cmsNetworks.length ? cmsNetworks : staticNetworks
   return (
     <>
-      <section className="relative overflow-hidden pt-36 pb-8 md:pt-44">
-        <div className="mesh-bg absolute inset-0" />
-        <div className="grid-fade absolute inset-0" />
-        <div className="container-x relative text-center">
-          <Reveal>
-            <span className="pill">Services</span>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <h1 className="heading mx-auto mt-6 max-w-3xl text-4xl leading-[1.08] sm:text-5xl md:text-6xl">
-              Growth channels you <span className="text-gradient">own, not rent</span>
-            </h1>
-          </Reveal>
-          <Reveal delay={0.16}>
-            <p className="mx-auto mt-6 max-w-2xl text-base text-ink-500 sm:text-lg">
-              Two services, one outcome: a partner ecosystem that sells your product on commission —
-              so acquisition costs fall while revenue compounds.
-            </p>
-          </Reveal>
-          <Reveal delay={0.24}>
-            <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <a
-                href={site.calendly}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-primary"
-              >
-                Book a free growth call
-                <ArrowRight className="h-4 w-4" />
-              </a>
-            </div>
-          </Reveal>
-        </div>
-      </section>
+      <ServicesHero />
 
       <ServicesSection />
       <StatsBand />
