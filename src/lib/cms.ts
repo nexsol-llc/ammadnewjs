@@ -40,6 +40,7 @@ export type CaseStudyItem = {
   client?: string
   industry?: string
   network?: string
+  networkLogo?: NetworkInfo
   duration?: string
   category?: CategoryInfo
   influencer?: {
@@ -91,6 +92,16 @@ const mapMedia = (m: any): MediaInfo | undefined => {
   }
 }
 
+const mapNetwork = (n: any): NetworkInfo | undefined => {
+  if (!n || typeof n !== 'object' || !n.name) return undefined
+  return {
+    id: String(n.id),
+    name: n.name,
+    color: n.color || '#6d4aff',
+    logo: mapMedia(n.logo),
+  }
+}
+
 const mapCategory = (c: any): CategoryInfo | undefined => {
   if (!c || typeof c !== 'object') return undefined
   return {
@@ -111,6 +122,7 @@ const mapCaseStudy = (d: any): CaseStudyItem => ({
   client: d.client || undefined,
   industry: d.industry || undefined,
   network: d.network || undefined,
+  networkLogo: mapNetwork(d.networkLogo),
   duration: d.duration || undefined,
   category: mapCategory(d.category),
   influencer: d.influencer

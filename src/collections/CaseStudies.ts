@@ -68,6 +68,16 @@ export const CaseStudies: CollectionConfig = {
       ],
     },
     {
+      name: 'networkLogo',
+      type: 'relationship',
+      relationTo: 'networks',
+      label: 'Network logo (shown on the thumbnail)',
+      admin: {
+        description:
+          'Pick the network whose logo should sit on this case study card. Logos are managed in Content → Networks & Platforms.',
+      },
+    },
+    {
       type: 'row',
       fields: [
         {

@@ -160,6 +160,10 @@ export interface CaseStudy {
   client?: string | null;
   industry?: string | null;
   /**
+   * Pick the network whose logo should sit on this case study card. Logos are managed in Content → Networks & Platforms.
+   */
+  networkLogo?: (number | null) | Network;
+  /**
    * e.g. Awin, Impact.com, ADCELL, Daisycon
    */
   network?: string | null;
@@ -268,6 +272,34 @@ export interface Category {
   createdAt: string;
 }
 /**
+ * Affiliate networks & creator platforms shown in the hero circle. The logo appears on its own in the middle of the circle. Recommended size: SVG, or a transparent PNG at 600 × 200 px. Until a logo is uploaded, the network name is shown as a wordmark instead.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "networks".
+ */
+export interface Network {
+  id: number;
+  name: string;
+  /**
+   * Recommended size — SVG (any size, scales perfectly), or a transparent PNG at 600 × 200 px (minimum 400 × 150 px). Use the horizontal logo trimmed of surrounding whitespace. It renders up to 176 × 67 px in the circle, so the extra pixels keep it sharp on retina screens. Keep files under ~150 KB.
+   */
+  logo?: (number | null) | Media;
+  /**
+   * Brand hex colour, e.g. #ff6b00
+   */
+  color?: string | null;
+  /**
+   * Lower numbers appear first.
+   */
+  order?: number | null;
+  /**
+   * Show in the hero circle.
+   */
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * Images and videos used across the site.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -351,34 +383,6 @@ export interface Review {
    * YouTube / Instagram / TikTok link
    */
   embedUrl?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * Affiliate networks & creator platforms shown in the hero circle. The logo appears on its own in the middle of the circle. Recommended size: SVG, or a transparent PNG at 600 × 200 px. Until a logo is uploaded, the network name is shown as a wordmark instead.
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "networks".
- */
-export interface Network {
-  id: number;
-  name: string;
-  /**
-   * Recommended size — SVG (any size, scales perfectly), or a transparent PNG at 600 × 200 px (minimum 400 × 150 px). Use the horizontal logo trimmed of surrounding whitespace. It renders up to 176 × 67 px in the circle, so the extra pixels keep it sharp on retina screens. Keep files under ~150 KB.
-   */
-  logo?: (number | null) | Media;
-  /**
-   * Brand hex colour, e.g. #ff6b00
-   */
-  color?: string | null;
-  /**
-   * Lower numbers appear first.
-   */
-  order?: number | null;
-  /**
-   * Show in the hero circle.
-   */
-  active?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -638,6 +642,7 @@ export interface CaseStudiesSelect<T extends boolean = true> {
   order?: T;
   client?: T;
   industry?: T;
+  networkLogo?: T;
   network?: T;
   duration?: T;
   influencer?:

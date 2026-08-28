@@ -13,7 +13,8 @@ export function CaseStudyCard({ study }: { study: CaseStudyItem }) {
       href={`/case-studies/${study.slug}`}
       className="card card-hover group flex h-full flex-col overflow-hidden"
     >
-      <div className="relative aspect-[16/10] overflow-hidden bg-surface-3">
+      <div className="relative">
+        <div className="relative aspect-[16/10] overflow-hidden bg-surface-3">
         {img ? (
           <Image
             src={img}
@@ -41,9 +42,36 @@ export function CaseStudyCard({ study }: { study: CaseStudyItem }) {
             </span>
           )}
         </div>
+        </div>
+
+        {/* Network mark — floats over the bottom edge of the image */}
+        {study.networkLogo && (
+          <div className="absolute -bottom-5 right-4 flex h-11 items-center gap-2 rounded-xl border border-line bg-white px-3 shadow-[0_8px_24px_-8px_rgba(16,16,40,0.28)]">
+            {study.networkLogo.logo?.url ? (
+              <Image
+                src={study.networkLogo.logo.url}
+                alt={study.networkLogo.name}
+                width={160}
+                height={60}
+                className="h-5 w-auto max-w-[5.5rem] object-contain"
+                unoptimized={study.networkLogo.logo.mimeType === 'image/svg+xml'}
+              />
+            ) : (
+              <>
+                <span
+                  className="h-2 w-2 shrink-0 rounded-full"
+                  style={{ background: study.networkLogo.color }}
+                />
+                <span className="heading text-xs whitespace-nowrap">
+                  {study.networkLogo.name}
+                </span>
+              </>
+            )}
+          </div>
+        )}
       </div>
 
-      <div className="flex flex-1 flex-col p-6">
+      <div className={`flex flex-1 flex-col p-6 ${study.networkLogo ? 'pt-8' : ''}`}>
         <h3 className="heading text-base leading-snug transition-colors group-hover:text-brand-600">
           {study.title}
         </h3>
