@@ -14,6 +14,7 @@ and Framer Motion.
 | **Admin (`/admin`)** | Case Studies (affiliate / influencer, multi-video per project), Categories, Reviews (image / video), Media, Leads, Contact inbox, Users |
 | **Hero** | Circular network slider — two counter-rotating rings of affiliate networks & creator platforms, with the active one highlighted in the centre |
 | **Revenue calculator** | Free tool on the home page. Visitor enters website, monthly visitors, orders, average order value, commission % and (optionally) their network; a name + email box unlocks the projection. Every submission is saved to **Leads** with both the inputs and the projected numbers |
+| **Networks & Platforms** | Networks shown in the hero circle. Upload each official logo — **SVG, or a transparent PNG at 600 × 200 px** (min 400 × 150). It renders up to 176 × 67 px, so the extra pixels stay sharp on retina. Without a logo the network name is shown as a wordmark |
 | **Road map** | Five-phase engagement timeline (first 90 days → month 6) with a scroll-linked progress line |
 | **Case studies** | Two types. Influencer case studies support uploading one or more campaign videos, or embedding YouTube / Instagram / TikTok links |
 | **Reviews** | Image (screenshot) reviews and video reviews — on the home page and the dedicated Testimonials page |

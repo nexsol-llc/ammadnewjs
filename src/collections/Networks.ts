@@ -9,7 +9,7 @@ export const Networks: CollectionConfig = {
     group: 'Content',
     defaultColumns: ['name', 'logo', 'color', 'order'],
     description:
-      'Affiliate networks & creator platforms shown in the hero circle. Upload each official logo — it appears in the middle of the circle. Without a logo, a coloured monogram is shown instead.',
+      'Affiliate networks & creator platforms shown in the hero circle. The logo appears on its own in the middle of the circle. Recommended size: SVG, or a transparent PNG at 600 × 200 px. Until a logo is uploaded, the network name is shown as a wordmark instead.',
   },
   defaultSort: 'order',
   access: {
@@ -26,7 +26,7 @@ export const Networks: CollectionConfig = {
       relationTo: 'media',
       admin: {
         description:
-          'Official logo. SVG or transparent PNG works best — wide/horizontal lockups look right in the circle.',
+          'Recommended size — SVG (any size, scales perfectly), or a transparent PNG at 600 × 200 px (minimum 400 × 150 px). Use the horizontal logo trimmed of surrounding whitespace. It renders up to 176 × 67 px in the circle, so the extra pixels keep it sharp on retina screens. Keep files under ~150 KB.',
       },
     },
     {

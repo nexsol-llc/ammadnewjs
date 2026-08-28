@@ -353,7 +353,7 @@ export interface Review {
   createdAt: string;
 }
 /**
- * Affiliate networks & creator platforms shown in the hero circle. Upload each official logo — it appears in the middle of the circle. Without a logo, a coloured monogram is shown instead.
+ * Affiliate networks & creator platforms shown in the hero circle. The logo appears on its own in the middle of the circle. Recommended size: SVG, or a transparent PNG at 600 × 200 px. Until a logo is uploaded, the network name is shown as a wordmark instead.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "networks".
@@ -362,7 +362,7 @@ export interface Network {
   id: number;
   name: string;
   /**
-   * Official logo. SVG or transparent PNG works best — wide/horizontal lockups look right in the circle.
+   * Recommended size — SVG (any size, scales perfectly), or a transparent PNG at 600 × 200 px (minimum 400 × 150 px). Use the horizontal logo trimmed of surrounding whitespace. It renders up to 176 × 67 px in the circle, so the extra pixels keep it sharp on retina screens. Keep files under ~150 KB.
    */
   logo?: (number | null) | Media;
   /**
