@@ -15,6 +15,7 @@ import { Reviews } from '@/collections/Reviews'
 import { ContactSubmissions } from '@/collections/ContactSubmissions'
 import { Leads } from '@/collections/Leads'
 import { Networks } from '@/collections/Networks'
+import { AuditRequests } from '@/collections/AuditRequests'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -28,7 +29,7 @@ export default buildConfig({
       titleSuffix: ' · Ammad Admin',
     },
   },
-  collections: [CaseStudies, Categories, Reviews, Networks, Media, Leads, ContactSubmissions, Users],
+  collections: [CaseStudies, Categories, Reviews, Networks, Media, AuditRequests, Leads, ContactSubmissions, Users],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || 'dev-only-secret-do-not-use-in-production',
   typescript: {

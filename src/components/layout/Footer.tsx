@@ -46,6 +46,14 @@ export function Footer() {
               ))}
               <li>
                 <Link
+                  href="/free-audit"
+                  className="text-sm font-semibold text-brand-600 hover:text-brand-700"
+                >
+                  Claim Free Audit
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/#revenue-calculator"
                   className="text-sm font-medium text-brand-600 hover:text-brand-700"
                 >

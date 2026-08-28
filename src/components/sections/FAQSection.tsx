@@ -5,21 +5,31 @@ import { Plus } from 'lucide-react'
 import { useState } from 'react'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { Reveal } from '@/components/ui/Reveal'
-import { faqs } from '@/lib/site'
+import { faqs as defaultFaqs } from '@/lib/site'
 
-export function FAQSection() {
+type Props = {
+  faqs?: { q: string; a: string }[]
+  eyebrow?: string
+  title?: React.ReactNode
+}
+
+export function FAQSection({
+  faqs = defaultFaqs,
+  eyebrow = 'FAQ',
+  title = (
+    <>
+      Questions brands ask <span className="text-gradient">before we start</span>
+    </>
+  ),
+}: Props) {
   const [open, setOpen] = useState<number | null>(0)
 
   return (
     <section className="relative py-24 md:py-32">
       <div className="container-x max-w-3xl">
         <SectionHeading
-          eyebrow="FAQ"
-          title={
-            <>
-              Questions brands ask <span className="text-gradient">before we start</span>
-            </>
-          }
+          eyebrow={eyebrow}
+          title={title}
         />
         <div className="space-y-3">
           {faqs.map((f, i) => {

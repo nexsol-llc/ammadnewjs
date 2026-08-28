@@ -72,6 +72,7 @@ export interface Config {
     reviews: Review;
     networks: Network;
     media: Media;
+    'audit-requests': AuditRequest;
     leads: Lead;
     'contact-submissions': ContactSubmission;
     users: User;
@@ -87,6 +88,7 @@ export interface Config {
     reviews: ReviewsSelect<false> | ReviewsSelect<true>;
     networks: NetworksSelect<false> | NetworksSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    'audit-requests': AuditRequestsSelect<false> | AuditRequestsSelect<true>;
     leads: LeadsSelect<false> | LeadsSelect<true>;
     'contact-submissions': ContactSubmissionsSelect<false> | ContactSubmissionsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
@@ -381,6 +383,59 @@ export interface Network {
   createdAt: string;
 }
 /**
+ * Requests from the Free Affiliate Program Audit page — brand details, their current program, and the bottlenecks they reported.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "audit-requests".
+ */
+export interface AuditRequest {
+  id: number;
+  name: string;
+  email: string;
+  company?: string | null;
+  website?: string | null;
+  role?: string | null;
+  monthlyRevenue?: string | null;
+  /**
+   * Auto-generated — this is the column shown in the list.
+   */
+  summary?: string | null;
+  program?: {
+    hasProgram?: ('yes' | 'paused' | 'no') | null;
+    network?: string | null;
+    monthsRunning?: string | null;
+    activePartners?: string | null;
+    monthlyAffiliateRevenue?: string | null;
+    commissionRate?: string | null;
+  };
+  challenges?:
+    | (
+        | 'dormant-partners'
+        | 'plateaued'
+        | 'coupon-leakage'
+        | 'recruitment'
+        | 'tracking'
+        | 'commission'
+        | 'bandwidth'
+        | 'profitability'
+      )[]
+    | null;
+  triedSoFar?: string | null;
+  goal?: string | null;
+  timeline?: string | null;
+  /**
+   * Where this audit stands.
+   */
+  status?: ('new' | 'in-progress' | 'delivered' | 'call-booked' | 'won' | 'not-a-fit') | null;
+  /**
+   * Private — never shown on the site.
+   */
+  notes?: string | null;
+  source?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * Every revenue-calculator submission: who they are, exactly what they entered, and the projection they were shown.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -511,6 +566,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'audit-requests';
+        value: number | AuditRequest;
       } | null)
     | ({
         relationTo: 'leads';
@@ -718,6 +777,38 @@ export interface MediaSelect<T extends boolean = true> {
               filename?: T;
             };
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "audit-requests_select".
+ */
+export interface AuditRequestsSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  company?: T;
+  website?: T;
+  role?: T;
+  monthlyRevenue?: T;
+  summary?: T;
+  program?:
+    | T
+    | {
+        hasProgram?: T;
+        network?: T;
+        monthsRunning?: T;
+        activePartners?: T;
+        monthlyAffiliateRevenue?: T;
+        commissionRate?: T;
+      };
+  challenges?: T;
+  triedSoFar?: T;
+  goal?: T;
+  timeline?: T;
+  status?: T;
+  notes?: T;
+  source?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

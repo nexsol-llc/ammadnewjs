@@ -76,11 +76,11 @@ export function Header() {
               })}
             </nav>
 
-            {/* Right group — keeps the CTA and menu button together at the edge */}
+            {/* Right group — keeps the CTAs and menu button together at the edge */}
             <div className="flex shrink-0 items-center gap-1 py-2">
               <Link
                 href="/#revenue-calculator"
-                className="hidden rounded-full px-4 py-2 text-[0.92rem] font-medium text-ink-500 transition-colors hover:text-ink-950 lg:block"
+                className="hidden rounded-full px-3.5 py-2 text-[0.92rem] font-medium text-ink-500 transition-colors hover:text-ink-950 xl:block"
               >
                 Estimate Revenue
               </Link>
@@ -88,11 +88,17 @@ export function Header() {
                 href={site.calendly}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group hidden items-center gap-1.5 rounded-full bg-gradient-to-b from-brand-400 to-brand-600 px-5 py-2.5 text-[0.92rem] font-semibold text-white shadow-[0_1px_0_rgba(255,255,255,0.22)_inset,0_8px_20px_-8px_rgba(91,51,245,0.65)] transition-shadow hover:shadow-[0_1px_0_rgba(255,255,255,0.22)_inset,0_12px_26px_-8px_rgba(91,51,245,0.8)] md:inline-flex"
+                className="hidden rounded-full border border-line-strong px-4 py-2 text-[0.92rem] font-semibold text-ink-950 transition-colors hover:border-brand-300 hover:bg-brand-50 lg:inline-flex"
               >
                 Book a Call
-                <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
               </a>
+              <Link
+                href="/free-audit"
+                className="group hidden items-center gap-1.5 rounded-full bg-gradient-to-b from-brand-400 to-brand-600 px-5 py-2.5 text-[0.92rem] font-semibold text-white shadow-[0_1px_0_rgba(255,255,255,0.22)_inset,0_8px_20px_-8px_rgba(91,51,245,0.65)] transition-shadow hover:shadow-[0_1px_0_rgba(255,255,255,0.22)_inset,0_12px_26px_-8px_rgba(91,51,245,0.8)] md:inline-flex"
+              >
+                Claim Free Audit
+                <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
+              </Link>
 
               <button
                 onClick={() => setOpen((v) => !v)}
@@ -143,18 +149,21 @@ export function Header() {
                 }}
                 className="mt-8 flex w-full max-w-xs flex-col gap-3"
               >
-                <Link href="/#revenue-calculator" className="btn btn-ghost w-full">
-                  Estimate Revenue
+                <Link href="/free-audit" className="btn btn-primary w-full">
+                  Claim Free Audit
+                  <ArrowRight className="h-4 w-4" />
                 </Link>
                 <a
                   href={site.calendly}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn btn-primary w-full"
+                  className="btn btn-ghost w-full"
                 >
                   Book a Free Growth Call
-                  <ArrowRight className="h-4 w-4" />
                 </a>
+                <Link href="/#revenue-calculator" className="btn btn-ghost w-full">
+                  Estimate Revenue
+                </Link>
               </motion.div>
             </motion.nav>
           </motion.div>
