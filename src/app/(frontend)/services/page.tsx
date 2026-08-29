@@ -3,13 +3,14 @@ import { Check, X } from 'lucide-react'
 import { Reveal, Stagger, StaggerItem } from '@/components/ui/Reveal'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { ServicesHero } from '@/components/sections/ServicesHero'
+import { NetworkStrip } from '@/components/sections/NetworkStrip'
 import { ServicesSection } from '@/components/sections/ServicesSection'
 import { RoadmapSection } from '@/components/sections/RoadmapSection'
 import { StatsBand } from '@/components/sections/StatsBand'
 import { FAQSection } from '@/components/sections/FAQSection'
 import { FinalCTA } from '@/components/sections/FinalCTA'
 import { networks as staticNetworks } from '@/lib/site'
-import { getNetworks } from '@/lib/cms'
+import { getNetworks, type NetworkInfo } from '@/lib/cms'
 
 export const metadata: Metadata = {
   title: 'Services',
@@ -28,10 +29,13 @@ export const revalidate = 120
 
 export default async function ServicesPage() {
   const cmsNetworks = await getNetworks()
-  const networks = cmsNetworks.length ? cmsNetworks : staticNetworks
+  const networks: NetworkInfo[] = cmsNetworks.length
+    ? cmsNetworks
+    : staticNetworks.map((n, i) => ({ id: `static-${i}`, name: n.name, color: n.color }))
   return (
     <>
       <ServicesHero />
+      <NetworkStrip networks={networks} />
 
       <ServicesSection />
       <StatsBand />
