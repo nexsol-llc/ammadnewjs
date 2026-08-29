@@ -65,9 +65,13 @@ export function ServicesHero() {
   })
 
   return (
-    <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
-      <div className="mesh-ember absolute inset-0" />
-      <div className="grid-fade absolute inset-0" />
+    <section className="relative pt-24 pb-14 md:pt-28 md:pb-20">
+      <div className="container-x">
+        {/* Panel — gives the hero a defined edge instead of bleeding into the
+            section below, and lifts it off the page. */}
+        <div className="relative overflow-hidden rounded-[2rem] border border-brand-300 bg-white px-5 py-14 shadow-[0_26px_70px_-28px_rgba(91,51,245,0.5)] md:px-10 md:py-20">
+          <div className="mesh-ember absolute inset-0" />
+          <div className="grid-fade absolute inset-0" />
 
       {/* Rising embers */}
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -87,7 +91,7 @@ export function ServicesHero() {
         ))}
       </div>
 
-      <div className="container-x relative text-center">
+          <div className="relative text-center">
         <motion.div {...fade(0)}>
           <span className="pill">Services</span>
         </motion.div>
@@ -172,6 +176,8 @@ export function ServicesHero() {
             Book a Call
           </a>
         </motion.div>
+          </div>
+        </div>
       </div>
     </section>
   )
