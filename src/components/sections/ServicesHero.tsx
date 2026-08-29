@@ -65,36 +65,23 @@ export function ServicesHero() {
   })
 
   return (
-    <section className="relative overflow-hidden bg-ink-950 pt-32 pb-20 md:pt-40 md:pb-28">
+    <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
       <div className="mesh-ember absolute inset-0" />
-
-      {/* Faint constellation, echoing the network idea */}
-      <svg
-        aria-hidden
-        className="absolute inset-0 h-full w-full opacity-[0.13]"
-        preserveAspectRatio="none"
-      >
-        <defs>
-          <pattern id="svc-dots" width="46" height="46" patternUnits="userSpaceOnUse">
-            <circle cx="1.5" cy="1.5" r="1.5" fill="rgba(255,255,255,0.5)" />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#svc-dots)" />
-      </svg>
+      <div className="grid-fade absolute inset-0" />
 
       {/* Rising embers */}
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
         {EMBERS.map((e, i) => (
           <span
             key={i}
-            className="animate-ember absolute bottom-1/3 rounded-full bg-orange-400"
+            className="animate-ember absolute bottom-1/3 rounded-full bg-orange-500/60"
             style={{
               left: `${e.l}%`,
               width: e.w,
               height: e.w,
               animationDelay: `${e.d}s`,
               animationDuration: `${e.s}s`,
-              boxShadow: '0 0 10px rgba(251,146,60,0.9)',
+              boxShadow: '0 0 8px rgba(249,115,22,0.55)',
             }}
           />
         ))}
@@ -102,7 +89,7 @@ export function ServicesHero() {
 
       <div className="container-x relative text-center">
         <motion.div {...fade(0)}>
-          <span className="pill-dark">Services</span>
+          <span className="pill">Services</span>
         </motion.div>
 
         <h1
@@ -125,7 +112,7 @@ export function ServicesHero() {
                 line correctly when the text wraps on small screens. */}
             <motion.span {...fade(T.line2)} className="mt-2.5 block">
               <motion.span
-                className="text-white/35 [-webkit-box-decoration-break:clone] [box-decoration-break:clone]"
+                className="text-ink-300 [-webkit-box-decoration-break:clone] [box-decoration-break:clone]"
                 style={{
                   backgroundImage: 'linear-gradient(#ef4444, #ef4444)',
                   backgroundRepeat: 'no-repeat',
@@ -144,10 +131,10 @@ export function ServicesHero() {
             </motion.span>
 
             {/* Line 3 — types once the strike lands */}
-            <span className="mt-2.5 block text-orange-500">
+            <span className="text-gradient mt-2.5 block">
               {LINE_3.slice(0, typed)}
               {!reduce && typed < LINE_3.length && typed > 0 && (
-                <span className="animate-caret ml-0.5 font-light text-orange-400">|</span>
+                <span className="animate-caret ml-0.5 font-light text-brand-500">|</span>
               )}
               {/* holds the line height before typing begins */}
               {typed === 0 && <span className="invisible">{LINE_3}</span>}
@@ -157,7 +144,7 @@ export function ServicesHero() {
 
         <motion.p
           {...fade(reduce ? 0.3 : TYPE_END + 0.1)}
-          className="mx-auto mt-7 max-w-2xl text-base leading-relaxed text-white/60 sm:text-lg"
+          className="mx-auto mt-7 max-w-2xl text-base leading-relaxed text-ink-500 sm:text-lg"
         >
           Imagine a growth strategy with zero wasted budget, completely eliminated CAC risk, and
           guaranteed margins on every transaction. Welcome to affiliate marketing — the channel most
@@ -172,7 +159,7 @@ export function ServicesHero() {
             Claim Free Audit
             <ArrowRight className="h-4 w-4" />
           </Link>
-          <Link href="/#revenue-calculator" className="btn btn-dark">
+          <Link href="/#revenue-calculator" className="btn btn-ghost">
             <Calculator className="h-4 w-4" />
             Estimate Revenue
           </Link>
@@ -180,7 +167,7 @@ export function ServicesHero() {
             href={site.calendly}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-dark"
+            className="btn btn-ghost"
           >
             Book a Call
           </a>
