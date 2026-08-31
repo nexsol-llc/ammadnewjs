@@ -59,7 +59,7 @@ export function AboutTeaser() {
             <Reveal delay={0.45}>
               <Link
                 href="/about"
-                className="group mt-8 inline-flex items-center gap-2 text-sm font-semibold text-brand-600 hover:text-brand-700"
+                className="group mt-8 inline-flex items-center gap-2 py-1.5 text-sm font-semibold text-brand-600 hover:text-brand-700"
               >
                 More about how I work
                 <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />

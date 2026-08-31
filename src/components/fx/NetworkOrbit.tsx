@@ -28,8 +28,11 @@ export function NetworkOrbit({ networks }: { networks: NetworkInfo[] }) {
   if (!networks.length) return null
   const current = networks[active % networks.length]
 
+  /* Chips are centred on the outer ring, so half of each one sits outside it.
+     On a phone that pushed them past the screen edge — narrowing the orbit
+     leaves the margin they need without shrinking the labels. */
   return (
-    <div className="relative mx-auto aspect-square w-full max-w-[30rem]">
+    <div className="relative mx-auto aspect-square w-[76%] max-w-[30rem] sm:w-full">
       {/* Ring guides */}
       <div className="absolute inset-0 rounded-full border border-line" />
       <div className="absolute inset-[13%] rounded-full border border-line" />

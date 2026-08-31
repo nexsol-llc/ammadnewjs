@@ -129,7 +129,7 @@ export function ReviewCarousel({ reviews }: { reviews: ReviewItem[] }) {
             <ChevronLeft className="h-5 w-5" />
           </button>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center">
             {reviews.map((r, i) => (
               <button
                 key={r.id}
@@ -137,10 +137,18 @@ export function ReviewCarousel({ reviews }: { reviews: ReviewItem[] }) {
                 onClick={() => setActive(i)}
                 aria-label={`Show review ${i + 1} of ${n}`}
                 aria-current={i === active}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  i === active ? 'w-6 bg-brand-500' : 'w-2 bg-line-strong hover:bg-brand-200'
-                }`}
-              />
+                /* Padding around the dot, not a bigger dot: an 8px target is
+                   below the minimum anyone can reliably hit with a thumb. */
+                className="group p-2.5"
+              >
+                <span
+                  className={`block h-2 rounded-full transition-all duration-300 ${
+                    i === active
+                      ? 'w-6 bg-brand-500'
+                      : 'w-2 bg-line-strong group-hover:bg-brand-200'
+                  }`}
+                />
+              </button>
             ))}
           </div>
 

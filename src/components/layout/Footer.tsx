@@ -43,7 +43,7 @@ export function Footer() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="text-sm text-ink-500 transition-colors hover:text-brand-600"
+                    className="inline-block py-1.5 text-sm text-ink-500 transition-colors hover:text-brand-600"
                   >
                     {item.label}
                   </Link>
@@ -52,7 +52,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/free-audit"
-                  className="text-sm font-semibold text-brand-600 hover:text-brand-700"
+                  className="inline-block py-1.5 text-sm font-semibold text-brand-600 hover:text-brand-700"
                 >
                   Claim Free Audit
                 </Link>
@@ -60,7 +60,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/#revenue-calculator"
-                  className="text-sm font-medium text-brand-600 hover:text-brand-700"
+                  className="inline-block py-1.5 text-sm font-medium text-brand-600 hover:text-brand-700"
                 >
                   Revenue Calculator
                 </Link>
@@ -76,7 +76,7 @@ export function Footer() {
               <li>
                 <a
                   href={`mailto:${site.email}`}
-                  className="inline-flex items-center gap-2.5 text-sm text-ink-500 transition-colors hover:text-brand-600"
+                  className="inline-flex items-center gap-2.5 py-1.5 text-sm text-ink-500 transition-colors hover:text-brand-600"
                 >
                   <Mail className="h-4 w-4 text-brand-500" /> {site.email}
                 </a>
@@ -86,7 +86,7 @@ export function Footer() {
                   href={site.whatsapp}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2.5 text-sm text-ink-500 transition-colors hover:text-brand-600"
+                  className="inline-flex items-center gap-2.5 py-1.5 text-sm text-ink-500 transition-colors hover:text-brand-600"
                 >
                   <MessageCircle className="h-4 w-4 text-brand-500" /> WhatsApp
                 </a>
@@ -96,7 +96,7 @@ export function Footer() {
                   href={site.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2.5 text-sm text-ink-500 transition-colors hover:text-brand-600"
+                  className="inline-flex items-center gap-2.5 py-1.5 text-sm text-ink-500 transition-colors hover:text-brand-600"
                 >
                   <Linkedin className="h-4 w-4 text-brand-500" /> LinkedIn
                 </a>
