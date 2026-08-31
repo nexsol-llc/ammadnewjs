@@ -1,8 +1,8 @@
 import type { MetadataRoute } from 'next'
-import { site } from '@/lib/site'
+import { canonicalUrl } from '@/lib/site'
 
 export default function robots(): MetadataRoute.Robots {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || site.domain
+  const base = canonicalUrl
   return {
     rules: [
       {

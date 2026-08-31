@@ -1,11 +1,11 @@
 import type { MetadataRoute } from 'next'
 import { getCaseStudies, getCategories } from '@/lib/cms'
-import { site } from '@/lib/site'
+import { canonicalUrl } from '@/lib/site'
 
 export const revalidate = 3600
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || site.domain
+  const base = canonicalUrl
 
   const staticPages: MetadataRoute.Sitemap = [
     '',

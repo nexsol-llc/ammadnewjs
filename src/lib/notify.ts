@@ -1,4 +1,5 @@
 import type { CollectionAfterChangeHook } from 'payload'
+import { canonicalUrl } from '@/lib/site'
 
 /**
  * Emails you when a new lead comes in.
@@ -54,7 +55,7 @@ export const notifyOnCreate =
     const to = process.env.NOTIFY_EMAIL || process.env.SMTP_USER
     if (!to) return doc
 
-    const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || '').replace(/\/+$/, '')
+    const siteUrl = canonicalUrl
     const record = doc as Record<string, unknown>
 
     try {

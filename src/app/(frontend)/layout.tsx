@@ -5,7 +5,7 @@ import { Footer } from '@/components/layout/Footer'
 import { BookCallFab } from '@/components/ui/BookCallFab'
 import { BottomBar } from '@/components/layout/BottomBar'
 import { Tracker } from '@/components/analytics/Tracker'
-import { site } from '@/lib/site'
+import { canonicalUrl, site } from '@/lib/site'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
@@ -15,7 +15,7 @@ const jakarta = Plus_Jakarta_Sans({
   display: 'swap',
 })
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || site.domain
+const siteUrl = canonicalUrl
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

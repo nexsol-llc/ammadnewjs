@@ -1,7 +1,24 @@
+/**
+ * The site's canonical address, used for sitemaps, social previews and the
+ * links inside lead emails.
+ *
+ * The environment variable wins, but it is normalised first: an http:// value
+ * would publish insecure URLs to search engines, and a trailing slash would
+ * produce doubled slashes in every generated link. Both are easy to get wrong
+ * in a hosting dashboard and neither should be able to reach production.
+ */
+export const canonicalUrl = (() => {
+  const configured = (process.env.NEXT_PUBLIC_SITE_URL || '').trim().replace(/\/+$/, '')
+  if (!configured) return 'https://www.ammadd.com'
+  // Local development is served over plain http, so leave it alone.
+  if (/^https?:\/\/(localhost|127\.0\.0\.1)/i.test(configured)) return configured
+  return configured.replace(/^http:\/\//i, 'https://')
+})()
+
 export const site = {
   name: 'M. Ammad',
   shortName: 'AMMAD',
-  domain: 'https://ammadd.com',
+  domain: 'https://www.ammadd.com',
   title: 'M. Ammad — Affiliate & Influencer Marketing for E-commerce & SaaS Brands',
   description:
     'I build and scale affiliate & influencer programs that turn brand partnerships into a predictable revenue engine — $350K+ tracked partner revenue, up to 30.7x ROAS.',
