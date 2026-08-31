@@ -154,13 +154,18 @@ export function Header() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.22 }}
-            className="fixed inset-0 z-40 bg-white/97 backdrop-blur-2xl lg:hidden"
+            className="fixed inset-0 z-40 overflow-y-auto overscroll-contain bg-white/97 backdrop-blur-2xl lg:hidden"
           >
             <motion.nav
               initial="hidden"
               animate="show"
               variants={{ hidden: {}, show: { transition: { staggerChildren: 0.06, delayChildren: 0.08 } } }}
-              className="flex h-full flex-col items-center justify-center gap-1 px-8"
+              /* min-h-full rather than h-full: a centred flex column silently
+                 clips its own overflow at the top, which hid the first link
+                 behind the header capsule on shorter phones. This centres a
+                 menu that fits and scrolls one that doesn't. The top padding
+                 clears the capsule, which sits above this overlay at z-50. */
+              className="flex min-h-full flex-col items-center justify-center gap-0.5 px-8 pt-20 pb-[calc(2rem+env(safe-area-inset-bottom))]"
             >
               {nav.map((item) => (
                 <motion.div
@@ -170,7 +175,7 @@ export function Header() {
                     show: { opacity: 1, y: 0, transition: { duration: 0.35 } },
                   }}
                 >
-                  <Link href={item.href} className="heading block py-3 text-3xl">
+                  <Link href={item.href} className="heading block py-2.5 text-2xl sm:text-3xl">
                     {item.label}
                   </Link>
                 </motion.div>
@@ -180,7 +185,7 @@ export function Header() {
                   hidden: { opacity: 0, y: 20 },
                   show: { opacity: 1, y: 0, transition: { duration: 0.35 } },
                 }}
-                className="mt-8 flex w-full max-w-xs flex-col gap-3"
+                className="mt-6 flex w-full max-w-xs flex-col gap-2.5"
               >
                 <Link href="/free-audit" className="btn btn-primary w-full">
                   Claim Free Audit
