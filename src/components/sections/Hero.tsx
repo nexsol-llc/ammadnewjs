@@ -1,12 +1,17 @@
 'use client'
 
 import { motion, useReducedMotion } from 'framer-motion'
+import Image from 'next/image'
 import { ArrowRight, Calculator, Star } from 'lucide-react'
 import { NetworkOrbit } from '@/components/fx/NetworkOrbit'
 import { MagneticButton } from '@/components/ui/Buttons'
 import { Typewriter } from '@/components/ui/Typewriter'
 import { heroCategories, site } from '@/lib/site'
 import type { NetworkInfo } from '@/lib/cms'
+
+/* Stills lifted from the video testimonials on /testimonials — real clients,
+   not stock. */
+const FACES = ['/faces/client-1.webp', '/faces/client-2.webp', '/faces/client-3.webp']
 
 const proof = [
   { value: '$350K+', label: 'Partner revenue tracked' },
@@ -81,13 +86,27 @@ export function Hero({ networks }: { networks: NetworkInfo[] }) {
             </motion.div>
 
             <motion.div {...rise(0.38)} className="mt-9 flex flex-col items-center gap-4 lg:items-start">
-              <div className="flex items-center gap-2">
-                <div className="flex gap-0.5">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className="h-4 w-4 text-amber-400" fill="currentColor" />
+              <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 lg:justify-start">
+                <div className="flex -space-x-2.5">
+                  {FACES.map((src) => (
+                    <Image
+                      key={src}
+                      src={src}
+                      alt=""
+                      width={200}
+                      height={200}
+                      className="h-9 w-9 rounded-full object-cover ring-2 ring-white"
+                    />
                   ))}
                 </div>
-                <span className="text-sm text-ink-500">Trusted by 15+ brands worldwide</span>
+                <div className="flex items-center gap-2">
+                  <div className="flex gap-0.5">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star key={i} className="h-4 w-4 text-amber-400" fill="currentColor" />
+                    ))}
+                  </div>
+                  <span className="text-sm text-ink-500">Trusted by 1,000+ brands worldwide</span>
+                </div>
               </div>
               <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 lg:justify-start">
                 {proof.map((p) => (

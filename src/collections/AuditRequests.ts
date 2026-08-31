@@ -1,5 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { anyone, authenticated } from '@/access'
+import { crmFields } from '@/fields/crm'
+import { notifyOnCreate } from '@/lib/notify'
 
 export const AuditRequests: CollectionConfig = {
   slug: 'audit-requests',
@@ -19,6 +21,15 @@ export const AuditRequests: CollectionConfig = {
     delete: authenticated,
   },
   hooks: {
+    afterChange: [
+      notifyOnCreate('Free audit request', (d) => [
+        ['Name', d.name],
+        ['Email', d.email],
+        ['Company', d.company],
+        ['Role', d.role],
+        ['Summary', d.summary],
+      ]),
+    ],
     beforeChange: [
       ({ data, originalDoc }) => {
         /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -194,5 +205,7 @@ export const AuditRequests: CollectionConfig = {
       defaultValue: 'free-audit',
       admin: { position: 'sidebar', readOnly: true },
     },
+
+    ...crmFields,
   ],
 }

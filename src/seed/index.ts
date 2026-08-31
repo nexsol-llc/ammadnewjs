@@ -2,7 +2,7 @@
  * Content seeder — run with `npm run seed`.
  *
  * Idempotent: existing docs (matched by slug / name) are skipped, so it is safe
- * to re-run. Point DATABASE_URI (+ BLOB_READ_WRITE_TOKEN) at production and
+ * to re-run. Point DATABASE_URI (+ the R2 credentials) at production and
  * re-run to seed the live site.
  *
  * Sources:

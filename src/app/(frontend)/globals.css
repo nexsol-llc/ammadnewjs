@@ -31,6 +31,7 @@
   --color-brand-700: #4a25d9;
 
   --color-mint-500: #10b981;
+  --color-mint-600: #047857;
   --color-mint-50: #ecfdf5;
 
   --animate-marquee: marquee 46s linear infinite;
@@ -43,8 +44,19 @@
   --animate-orbit-inner-rev: orbit 38s linear infinite;
   --animate-float: float 7s ease-in-out infinite;
   --animate-caret: caret 1.05s step-end infinite;
-  --animate-burn: burn 3.4s ease-in-out infinite;
+  /* Flame licks sideways across the headline while the glow flickers. */
+  --animate-burn: flame-lick 3.9s linear infinite, flame-flicker 1.7s ease-in-out infinite;
   --animate-ember: ember-rise 5s linear infinite;
+  --animate-shake: shake 4.6s ease-in-out infinite;
+  /* Services illustrations */
+  --animate-flow: flow-dash 1.9s linear infinite;
+  --animate-flow-tight: flow-dash-tight 1.3s linear infinite;
+  --animate-badge: badge-rise 3.4s ease-in-out infinite;
+  --animate-heart: heart-float 4.8s ease-out infinite;
+  --animate-feed: feed-scroll 17s linear infinite;
+  --animate-ring-spin: orbit 26s linear infinite;
+  --animate-row-glow: row-glow 4.8s ease-in-out infinite;
+  --animate-order-pop: order-pop 0.5s ease-out 1;
   --animate-pulse-ring: pulse-ring 3.2s ease-out infinite;
 
   @keyframes marquee {
@@ -71,26 +83,158 @@
       transform: rotate(0deg);
     }
   }
-  @keyframes burn {
-    0%,
-    100% {
-      background-position: 50% 34%;
+  /* Layer 1 (the tongue of flame) travels left to right across the words;
+     layer 2 (the embers sitting in the glyphs) breathes behind it. */
+  @keyframes flame-lick {
+    0% {
+      background-position: -75% 0%, 50% 30%;
     }
-    50% {
-      background-position: 50% 72%;
+    35% {
+      background-position: 35% 0%, 50% 52%;
+    }
+    70% {
+      background-position: 125% 0%, 50% 38%;
+    }
+    100% {
+      background-position: 195% 0%, 50% 30%;
     }
   }
+  @keyframes flame-flicker {
+    0%,
+    100% {
+      filter: drop-shadow(0 2px 10px rgba(249, 115, 22, 0.26));
+    }
+    38% {
+      filter: drop-shadow(0 3px 17px rgba(251, 146, 60, 0.5));
+    }
+    72% {
+      filter: drop-shadow(0 2px 7px rgba(234, 88, 12, 0.2));
+    }
+  }
+  /* Sparks drift sideways as they climb — --drift is set per ember. */
   @keyframes ember-rise {
     0% {
-      transform: translateY(0) scale(1);
+      transform: translate3d(0, 0, 0) scale(1);
       opacity: 0;
     }
     12% {
       opacity: 0.85;
     }
+    55% {
+      transform: translate3d(calc(var(--drift, 0px) * 0.45), -78px, 0) scale(0.7);
+    }
     100% {
-      transform: translateY(-150px) scale(0.35);
+      transform: translate3d(var(--drift, 0px), -165px, 0) scale(0.3);
       opacity: 0;
+    }
+  }
+  /* Idles, then rattles once per cycle — for the book-a-call button. */
+  @keyframes shake {
+    0%,
+    58%,
+    100% {
+      transform: rotate(0deg);
+    }
+    62% {
+      transform: rotate(-15deg) scale(1.08);
+    }
+    66% {
+      transform: rotate(13deg) scale(1.08);
+    }
+    70% {
+      transform: rotate(-11deg);
+    }
+    74% {
+      transform: rotate(9deg);
+    }
+    78% {
+      transform: rotate(-6deg);
+    }
+    82% {
+      transform: rotate(4deg);
+    }
+    86% {
+      transform: rotate(0deg);
+    }
+  }
+  /* Traffic running along the partner connectors. The offset equals two dash
+     periods (4 + 12), so the loop is seamless. */
+  @keyframes flow-dash {
+    to {
+      stroke-dashoffset: -32;
+    }
+  }
+  /* Tighter dashes for the short vertical hops in the outreach funnel; the
+     offset is two periods of 3 + 7, so it still loops seamlessly. */
+  @keyframes flow-dash-tight {
+    to {
+      stroke-dashoffset: -20;
+    }
+  }
+  /* A commission landing: pops in, holds, floats away — then the next sale.
+     Opacity is 0 at both ends, so the amount can be swapped on the loop
+     boundary without the change ever being seen. */
+  @keyframes badge-rise {
+    0%,
+    100% {
+      opacity: 0;
+      transform: translateY(12px) scale(0.88);
+    }
+    10% {
+      opacity: 1;
+      transform: translateY(0) scale(1.06);
+    }
+    18%,
+    58% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    84% {
+      opacity: 0;
+      transform: translateY(-16px) scale(0.98);
+    }
+  }
+  @keyframes heart-float {
+    0% {
+      opacity: 0;
+      transform: translate3d(0, 0, 0) scale(0.5);
+    }
+    18% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translate3d(var(--drift, 20px), -86px, 0) scale(1.1);
+    }
+  }
+  /* Rows lighting up one after another — the delays space the scan out. */
+  @keyframes row-glow {
+    0%,
+    26%,
+    100% {
+      background-color: transparent;
+    }
+    5%,
+    20% {
+      background-color: var(--color-brand-50);
+    }
+  }
+  /* A new order landing on the counter. Restarted by remounting the span. */
+  @keyframes order-pop {
+    0% {
+      transform: scale(1.16);
+    }
+    60% {
+      transform: scale(0.99);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  /* The feed inside the phone. Two identical copies, so -50% lands on the seam. */
+  @keyframes feed-scroll {
+    to {
+      transform: translateY(-50%);
     }
   }
   @keyframes caret {
@@ -409,15 +553,30 @@ input[type='range']::-moz-range-thumb {
 /* ── Services hero: burning headline ───────────────────────── */
 
 @utility text-burning {
-  background-image: linear-gradient(
-    180deg,
-    #0a0a14 0%,
-    #0a0a14 56%,
-    #7c2d12 74%,
-    #ea580c 90%,
-    #fb923c 100%
-  );
-  background-size: 100% 190%;
+  background-image:
+    /* the tongue of flame that sweeps across the line */
+    linear-gradient(
+      104deg,
+      transparent 0%,
+      rgba(124, 45, 18, 0.85) 14%,
+      #c2410c 26%,
+      #ea580c 38%,
+      #fb923c 48%,
+      #fcd34d 55%,
+      #fb923c 62%,
+      #ea580c 74%,
+      rgba(124, 45, 18, 0.8) 88%,
+      transparent 100%
+    ),
+    /* the charred glyphs it burns across */
+    linear-gradient(180deg, #0a0a14 0%, #0a0a14 58%, #7c2d12 78%, #c2410c 94%, #ea580c 100%);
+  background-size:
+    62% 100%,
+    100% 190%;
+  background-repeat: no-repeat;
+  background-position:
+    -75% 0%,
+    50% 30%;
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -444,6 +603,15 @@ input[type='range']::-moz-range-thumb {
   .animate-burn,
   .animate-ember,
   .animate-caret,
+  .animate-shake,
+  .animate-flow,
+  .animate-flow-tight,
+  .animate-badge,
+  .animate-heart,
+  .animate-feed,
+  .animate-ring-spin,
+  .animate-row-glow,
+  .animate-order-pop,
   .animate-pulse-ring {
     animation: none !important;
   }

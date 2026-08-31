@@ -1,8 +1,9 @@
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { SectionHeading } from '@/components/ui/SectionHeading'
-import { Reveal, Stagger, StaggerItem } from '@/components/ui/Reveal'
-import { ReviewCard } from '@/components/cards/ReviewCard'
+import { Reveal } from '@/components/ui/Reveal'
+import { ReviewCarousel } from '@/components/sections/ReviewCarousel'
+import { VideoReviewRail } from '@/components/sections/VideoReviewRail'
 import type { ReviewItem } from '@/lib/cms'
 
 type Props = {
@@ -19,7 +20,7 @@ export function ReviewsSection({ reviews, showAllLink = true, alt = true, headin
   const images = reviews.filter((r) => r.type === 'image')
 
   return (
-    <section className={`relative ${heading ? 'py-24 md:py-32' : 'pb-24 pt-4 md:pb-32'} ${alt ? 'section-alt' : ''}`}>
+    <section className={`relative ${heading ? 'py-16 md:py-20' : 'pb-16 pt-4 md:pb-20'} ${alt ? 'section-alt' : ''}`}>
       <div className="container-x">
         {heading && (
           <SectionHeading
@@ -34,26 +35,15 @@ export function ReviewsSection({ reviews, showAllLink = true, alt = true, headin
         )}
 
         {videos.length > 0 && (
-          <Stagger className="grid gap-6 md:grid-cols-2 lg:grid-cols-3" gap={0.1}>
-            {videos.map((r) => (
-              <StaggerItem key={r.id} className="h-full">
-                <ReviewCard review={r} />
-              </StaggerItem>
-            ))}
-          </Stagger>
+          <Reveal>
+            <VideoReviewRail reviews={videos} />
+          </Reveal>
         )}
 
         {images.length > 0 && (
-          <Stagger
-            className={`grid gap-6 sm:grid-cols-2 lg:grid-cols-4 ${videos.length ? 'mt-6' : ''}`}
-            gap={0.08}
-          >
-            {images.map((r) => (
-              <StaggerItem key={r.id} className="h-full">
-                <ReviewCard review={r} />
-              </StaggerItem>
-            ))}
-          </Stagger>
+          <Reveal className={videos.length ? 'mt-14' : ''}>
+            <ReviewCarousel reviews={images} />
+          </Reveal>
         )}
 
         {showAllLink && (

@@ -6,7 +6,7 @@ import { aboutPoints } from '@/lib/site'
 
 export function AboutTeaser() {
   return (
-    <section className="relative py-24 md:py-32">
+    <section className="relative py-16 md:py-20">
       <div className="container-x">
         <div className="grid items-center gap-14 lg:grid-cols-[0.85fr_1fr]">
           <Reveal x={-24} y={0}>

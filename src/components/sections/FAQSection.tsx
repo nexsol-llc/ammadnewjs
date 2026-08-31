@@ -25,7 +25,7 @@ export function FAQSection({
   const [open, setOpen] = useState<number | null>(0)
 
   return (
-    <section className="relative py-24 md:py-32">
+    <section className="relative py-16 md:py-20">
       <div className="container-x max-w-3xl">
         <SectionHeading
           eyebrow={eyebrow}

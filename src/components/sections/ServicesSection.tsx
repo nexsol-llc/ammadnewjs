@@ -1,90 +1,119 @@
 import Link from 'next/link'
 import { ArrowRight, Check, Handshake, Megaphone, Search, Users } from 'lucide-react'
+import { AffiliateFlow } from '@/components/fx/AffiliateFlow'
+import { InfluencerFlow } from '@/components/fx/InfluencerFlow'
+import { OutreachFlow } from '@/components/fx/OutreachFlow'
+import { PartnershipFlow } from '@/components/fx/PartnershipFlow'
 import { SectionHeading } from '@/components/ui/SectionHeading'
-import { Reveal, Stagger, StaggerItem } from '@/components/ui/Reveal'
+import { Reveal } from '@/components/ui/Reveal'
 import { services } from '@/lib/site'
 
-export function ServicesSection({ compact = false }: { compact?: boolean }) {
-  const mains = [
+export function ServicesSection({
+  compact = false,
+  tightTop = false,
+}: {
+  compact?: boolean
+  /** Sits the section right under a hero/logo strip instead of a full section gap. */
+  tightTop?: boolean
+}) {
+  /* Each service gets a row: the copy on one side, a moving diagram of how the
+     service works on the other. Rows alternate, so every diagram sits under the
+     copy of the service before it. */
+  const rows = [
     {
       ...services.affiliate,
       icon: Handshake,
       href: '/case-studies/affiliate-marketing',
       cta: 'See affiliate results',
+      art: AffiliateFlow,
+      artFirst: false,
     },
     {
       ...services.influencer,
       icon: Megaphone,
       href: '/case-studies/influencer-marketing',
       cta: 'See influencer results',
+      art: InfluencerFlow,
+      artFirst: true,
+    },
+    {
+      ...services.extras[0],
+      icon: Users,
+      href: '/case-studies/affiliate-marketing',
+      cta: 'See managed programs',
+      art: PartnershipFlow,
+      artFirst: false,
+    },
+    {
+      ...services.extras[1],
+      icon: Search,
+      href: '/case-studies/influencer-marketing',
+      cta: 'See creator campaigns',
+      art: OutreachFlow,
+      artFirst: true,
     },
   ]
+  const shown = compact ? rows.slice(0, 2) : rows
 
   return (
-    <section className="relative py-24 md:py-32">
+    <section
+      className={`relative pb-16 md:pb-20 ${tightTop ? 'pt-12 md:pt-16' : 'pt-16 md:pt-20'}`}
+    >
       <div className="container-x">
         <SectionHeading
           eyebrow="Services"
           title={
             <>
-              One operator. <span className="text-gradient">Two compounding channels.</span>
+              Turn Partnerships Into a{' '}
+              <span className="text-gradient">Predictable Growth Channel.</span>
             </>
           }
-          subtitle="Both services follow the same principle: build a partner ecosystem your brand owns, then scale it into a channel that outperforms paid ads."
+          subtitle="Every service follows the same principle: build a partner ecosystem your brand owns, then scale it into a channel that outperforms paid ads."
         />
 
-        <div className="grid gap-6 lg:grid-cols-2">
-          {mains.map((s, i) => (
-            <Reveal key={s.title} delay={i * 0.1}>
-              <div className="card card-hover group h-full p-8 md:p-10">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-600 transition-transform duration-300 group-hover:scale-110">
-                  <s.icon className="h-6 w-6" />
+        <div className="grid gap-6 lg:gap-8">
+          {shown.map((s) => (
+            <div key={s.title} className="grid gap-6 lg:grid-cols-2 lg:gap-8">
+              <Reveal className={s.artFirst ? 'lg:order-2' : undefined}>
+                <div className="card card-hover group h-full p-8 md:p-10">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-600 transition-transform duration-300 group-hover:scale-110">
+                    <s.icon className="h-6 w-6" />
+                  </div>
+                  <h3 className="heading mt-6 text-2xl md:text-[1.7rem]">{s.title}</h3>
+                  <p className="mt-2 text-sm font-semibold text-brand-600">{s.tagline}</p>
+                  <p className="mt-4 text-sm leading-relaxed text-ink-500 md:text-base">
+                    {s.description}
+                  </p>
+                  <ul className="mt-7 grid gap-3 sm:grid-cols-2">
+                    {s.features.map((f) => (
+                      <li key={f} className="flex items-start gap-2.5 text-sm text-ink-700">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-mint-500" />
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+                  <Link
+                    href={s.href}
+                    className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600 hover:text-brand-700"
+                  >
+                    {s.cta}
+                    <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  </Link>
                 </div>
-                <h3 className="heading mt-6 text-2xl md:text-[1.7rem]">{s.title}</h3>
-                <p className="mt-2 text-sm font-semibold text-brand-600">{s.tagline}</p>
-                <p className="mt-4 text-sm leading-relaxed text-ink-500 md:text-base">
-                  {s.description}
-                </p>
-                <ul className="mt-7 grid gap-3 sm:grid-cols-2">
-                  {s.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2.5 text-sm text-ink-700">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-mint-500" />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href={s.href}
-                  className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600 hover:text-brand-700"
-                >
-                  {s.cta}
-                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </Link>
-              </div>
-            </Reveal>
+              </Reveal>
+
+              <Reveal delay={0.12} className={s.artFirst ? 'lg:order-1' : undefined}>
+                <div className="card relative flex h-full items-center justify-center overflow-hidden p-5 sm:p-8">
+                  <div className="mesh-bg absolute inset-0" />
+                  <div className="grid-fade absolute inset-0" />
+                  <div className="relative w-full max-w-[30rem]">
+                    <s.art />
+                  </div>
+                </div>
+              </Reveal>
+            </div>
           ))}
         </div>
-
-        {!compact && (
-          <Stagger className="mt-6 grid gap-6 md:grid-cols-2" delay={0.1}>
-            {services.extras.map((s, i) => {
-              const Icon = i === 0 ? Users : Search
-              return (
-                <StaggerItem key={s.title}>
-                  <div className="card card-hover flex h-full items-start gap-5 p-7">
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-surface-3 text-ink-700">
-                      <Icon className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <h4 className="heading text-lg">{s.title}</h4>
-                      <p className="mt-2 text-sm leading-relaxed text-ink-500">{s.description}</p>
-                    </div>
-                  </div>
-                </StaggerItem>
-              )
-            })}
-          </Stagger>
-        )}
       </div>
     </section>
   )

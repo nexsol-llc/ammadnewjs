@@ -3,7 +3,7 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowRight, Calculator } from 'lucide-react'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type CSSProperties } from 'react'
 import { site } from '@/lib/site'
 
 const LINE_1 = 'You’re Burning Budget.'
@@ -21,20 +21,24 @@ const T = {
 }
 const TYPE_END = T.type + (LINE_3.length * T.charMs) / 1000
 
-/** Fixed so server and client render identically. */
+/**
+ * Fixed so server and client render identically.
+ * l = left %, d = delay, s = duration, w = size px, x = sideways drift px —
+ * the sparks lean the same way the flame licks, left to right.
+ */
 const EMBERS = [
-  { l: 8, d: 0, s: 5.2, w: 5 },
-  { l: 17, d: 1.4, s: 6.1, w: 3 },
-  { l: 26, d: 2.7, s: 4.8, w: 4 },
-  { l: 35, d: 0.6, s: 5.6, w: 3 },
-  { l: 44, d: 3.1, s: 6.4, w: 5 },
-  { l: 53, d: 1.9, s: 5.0, w: 3 },
-  { l: 62, d: 0.3, s: 5.9, w: 4 },
-  { l: 71, d: 2.2, s: 5.4, w: 3 },
-  { l: 80, d: 3.6, s: 6.2, w: 5 },
-  { l: 89, d: 1.1, s: 5.1, w: 3 },
-  { l: 13, d: 4.0, s: 6.6, w: 4 },
-  { l: 67, d: 4.4, s: 5.7, w: 3 },
+  { l: 8, d: 0, s: 5.2, w: 5, x: 46 },
+  { l: 17, d: 1.4, s: 6.1, w: 3, x: 28 },
+  { l: 26, d: 2.7, s: 4.8, w: 4, x: 62 },
+  { l: 35, d: 0.6, s: 5.6, w: 3, x: 18 },
+  { l: 44, d: 3.1, s: 6.4, w: 5, x: 54 },
+  { l: 53, d: 1.9, s: 5.0, w: 3, x: -22 },
+  { l: 62, d: 0.3, s: 5.9, w: 4, x: 40 },
+  { l: 71, d: 2.2, s: 5.4, w: 3, x: 70 },
+  { l: 80, d: 3.6, s: 6.2, w: 5, x: -34 },
+  { l: 89, d: 1.1, s: 5.1, w: 3, x: 24 },
+  { l: 13, d: 4.0, s: 6.6, w: 4, x: 58 },
+  { l: 67, d: 4.4, s: 5.7, w: 3, x: -18 },
 ]
 
 export function ServicesHero() {
@@ -65,7 +69,7 @@ export function ServicesHero() {
   })
 
   return (
-    <section className="relative pt-24 pb-14 md:pt-28 md:pb-20">
+    <section className="relative pt-24 pb-8 md:pt-28 md:pb-10">
       <div className="container-x">
         {/* Panel — gives the hero a defined edge instead of bleeding into the
             section below, and lifts it off the page. */}
@@ -79,14 +83,17 @@ export function ServicesHero() {
           <span
             key={i}
             className="animate-ember absolute bottom-1/3 rounded-full bg-orange-500/60"
-            style={{
-              left: `${e.l}%`,
-              width: e.w,
-              height: e.w,
-              animationDelay: `${e.d}s`,
-              animationDuration: `${e.s}s`,
-              boxShadow: '0 0 8px rgba(249,115,22,0.55)',
-            }}
+            style={
+              {
+                left: `${e.l}%`,
+                width: e.w,
+                height: e.w,
+                animationDelay: `${e.d}s`,
+                animationDuration: `${e.s}s`,
+                boxShadow: '0 0 8px rgba(249,115,22,0.55)',
+                '--drift': `${e.x}px`,
+              } as CSSProperties
+            }
           />
         ))}
       </div>

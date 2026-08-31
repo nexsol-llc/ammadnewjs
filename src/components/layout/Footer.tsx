@@ -39,11 +39,6 @@ export function Footer() {
           <div>
             <h3 className="text-xs font-semibold uppercase tracking-[0.16em] text-ink-400">Explore</h3>
             <ul className="mt-4 space-y-2.5">
-              <li>
-                <Link href="/" className="text-sm text-ink-500 transition-colors hover:text-brand-600">
-                  Home
-                </Link>
-              </li>
               {nav.map((item) => (
                 <li key={item.href}>
                   <Link

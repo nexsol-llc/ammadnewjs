@@ -81,8 +81,8 @@ export default async function FreeAuditPage() {
                     <p className="text-xs text-ink-400">Partner revenue tracked</p>
                   </div>
                   <div>
-                    <p className="heading text-xl">15+</p>
-                    <p className="text-xs text-ink-400">Programs audited & scaled</p>
+                    <p className="heading text-xl">1,000+</p>
+                    <p className="text-xs text-ink-400">Brands audited & scaled</p>
                   </div>
                   <div>
                     <p className="heading text-xl">5 days</p>
@@ -107,7 +107,7 @@ export default async function FreeAuditPage() {
       </section>
 
       {/* ── Bottlenecks ───────────────────────────────── */}
-      <section className="section-alt relative py-24 md:py-32">
+      <section className="section-alt relative py-16 md:py-20">
         <div className="container-x">
           <SectionHeading
             eyebrow="What I look for"
@@ -138,7 +138,7 @@ export default async function FreeAuditPage() {
       </section>
 
       {/* ── What you get ──────────────────────────────── */}
-      <section className="relative py-24 md:py-32">
+      <section className="relative py-16 md:py-20">
         <div className="container-x">
           <SectionHeading
             eyebrow="What you get"
@@ -168,7 +168,7 @@ export default async function FreeAuditPage() {
       <StatsBand />
 
       {/* ── How it works ──────────────────────────────── */}
-      <section className="relative py-24 md:py-32">
+      <section className="relative py-16 md:py-20">
         <div className="container-x">
           <SectionHeading
             eyebrow="How it works"
@@ -209,7 +209,7 @@ export default async function FreeAuditPage() {
       </section>
 
       {/* ── Who it is for ─────────────────────────────── */}
-      <section className="section-alt relative py-24 md:py-32">
+      <section className="section-alt relative py-16 md:py-20">
         <div className="container-x">
           <SectionHeading
             eyebrow="Honest filter"
@@ -266,7 +266,7 @@ export default async function FreeAuditPage() {
       <FAQSection faqs={auditFaqs} eyebrow="Audit FAQ" />
 
       {/* ── Closing CTA with the form again ───────────── */}
-      <section className="relative overflow-hidden bg-ink-950 py-24 md:py-32">
+      <section className="relative overflow-hidden bg-ink-950 py-16 md:py-20">
         <div className="mesh-dark absolute inset-0" />
         <div className="container-x relative">
           <div className="grid items-center gap-12 lg:grid-cols-[1fr_1fr] lg:gap-16">

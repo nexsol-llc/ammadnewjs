@@ -4,20 +4,37 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { AnimatePresence, motion, useScroll, useSpring } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ArrowRight, Menu, X } from 'lucide-react'
 import { nav, site } from '@/lib/site'
 
+/* The capsule cannot fit six links beside three CTAs — About lives in the
+   footer and the mobile menu instead, where there is room for it. */
+const desktopNav = nav.filter((item) => item.href !== '/about')
+
 export function Header() {
   const [scrolled, setScrolled] = useState(false)
+  const [hidden, setHidden] = useState(false)
   const [open, setOpen] = useState(false)
+  const lastY = useRef(0)
   const pathname = usePathname()
 
   const { scrollYProgress } = useScroll()
   const progress = useSpring(scrollYProgress, { stiffness: 140, damping: 26, restDelta: 0.001 })
 
+  /* Slides away on the way down, comes straight back on the way up. The 6px
+     deadzone stops trackpad jitter from flipping it, and the bar is always
+     shown near the top of the page. */
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 16)
+    lastY.current = window.scrollY
+    const onScroll = () => {
+      const y = window.scrollY
+      setScrolled(y > 16)
+      const delta = y - lastY.current
+      if (Math.abs(delta) < 6) return
+      setHidden(delta > 0 && y > 120)
+      lastY.current = y
+    }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
@@ -40,7 +57,11 @@ export function Header() {
       />
 
       {/* Floating capsule */}
-      <header className="fixed inset-x-0 top-0 z-50 pt-3 md:pt-5">
+      <header
+        className={`fixed inset-x-0 top-0 z-50 pt-3 transition-transform duration-300 ease-out md:pt-5 ${
+          hidden && !open ? '-translate-y-[135%]' : 'translate-y-0'
+        }`}
+      >
         <div className="container-x">
           <div
             className={`flex items-center justify-between gap-4 rounded-full border bg-white/85 pl-5 pr-2 backdrop-blur-xl transition-all duration-300 md:pl-7 ${
@@ -64,13 +85,14 @@ export function Header() {
             </Link>
 
             <nav className="hidden items-center gap-0.5 lg:flex">
-              {nav.map((item) => {
-                const active = pathname.startsWith(item.href)
+              {desktopNav.map((item) => {
+                const active =
+                  item.href === '/' ? pathname === '/' : pathname.startsWith(item.href)
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`relative rounded-full px-4 py-2 text-[0.92rem] font-medium transition-colors ${
+                    className={`relative whitespace-nowrap rounded-full px-4 py-2 text-[0.92rem] font-medium transition-colors ${
                       active ? 'text-ink-950' : 'text-ink-500 hover:text-ink-950'
                     }`}
                   >
@@ -91,7 +113,7 @@ export function Header() {
             <div className="flex shrink-0 items-center gap-1 py-2">
               <Link
                 href="/#revenue-calculator"
-                className="hidden rounded-full px-3.5 py-2 text-[0.92rem] font-medium text-ink-500 transition-colors hover:text-ink-950 xl:block"
+                className="hidden rounded-full px-3.5 py-2 text-[0.92rem] font-medium text-ink-500 underline decoration-brand-300 decoration-2 underline-offset-[6px] transition-colors hover:text-ink-950 hover:decoration-brand-400 xl:block"
               >
                 Estimate Revenue
               </Link>
@@ -99,7 +121,7 @@ export function Header() {
                 href={site.calendly}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hidden rounded-full border border-line-strong px-4 py-2 text-[0.92rem] font-semibold text-ink-950 transition-colors hover:border-brand-300 hover:bg-brand-50 lg:inline-flex"
+                className="hidden whitespace-nowrap rounded-full border border-brand-200 bg-brand-100 px-4 py-2 text-[0.92rem] font-semibold text-brand-700 transition-colors hover:border-brand-300 hover:bg-brand-200 xl:inline-flex"
               >
                 Book a Call
               </a>

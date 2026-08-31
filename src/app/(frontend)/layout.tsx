@@ -2,6 +2,9 @@ import type { Metadata, Viewport } from 'next'
 import { Inter, Plus_Jakarta_Sans } from 'next/font/google'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { BookCallFab } from '@/components/ui/BookCallFab'
+import { BottomBar } from '@/components/layout/BottomBar'
+import { Tracker } from '@/components/analytics/Tracker'
 import { site } from '@/lib/site'
 import './globals.css'
 
@@ -42,10 +45,14 @@ export const viewport: Viewport = {
 export default function FrontendLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${jakarta.variable}`}>
-      <body>
+      {/* Bottom padding clears the fixed action bar on small screens. */}
+      <body className="pb-[5.25rem] lg:pb-0">
         <Header />
         <main>{children}</main>
         <Footer />
+        <BookCallFab />
+        <BottomBar />
+        <Tracker />
       </body>
     </html>
   )

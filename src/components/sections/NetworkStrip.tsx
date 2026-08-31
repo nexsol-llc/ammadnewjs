@@ -7,7 +7,7 @@ export function NetworkStrip({ networks }: { networks: NetworkInfo[] }) {
   if (!networks.length) return null
 
   return (
-    <section className="relative pb-16 md:pb-20">
+    <section className="relative pb-8 md:pb-10">
       <div className="container-x">
         <div className="rounded-2xl border border-line bg-white px-3 py-5 shadow-[0_12px_34px_-22px_rgba(16,16,40,0.28)]">
           <p className="mb-4 text-center text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-ink-400">

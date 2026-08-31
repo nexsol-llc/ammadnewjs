@@ -8,7 +8,7 @@ import type { CaseStudyItem } from '@/lib/cms'
 export function FeaturedCaseStudies({ studies }: { studies: CaseStudyItem[] }) {
   if (!studies.length) return null
   return (
-    <section className="section-alt relative py-24 md:py-32">
+    <section className="section-alt relative py-16 md:py-20">
       <div className="container-x">
         <SectionHeading
           eyebrow="Case studies"

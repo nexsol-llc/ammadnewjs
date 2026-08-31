@@ -75,6 +75,7 @@ export interface Config {
     'audit-requests': AuditRequest;
     leads: Lead;
     'contact-submissions': ContactSubmission;
+    'analytics-sessions': AnalyticsSession;
     users: User;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -91,6 +92,7 @@ export interface Config {
     'audit-requests': AuditRequestsSelect<false> | AuditRequestsSelect<true>;
     leads: LeadsSelect<false> | LeadsSelect<true>;
     'contact-submissions': ContactSubmissionsSelect<false> | ContactSubmissionsSelect<true>;
+    'analytics-sessions': AnalyticsSessionsSelect<false> | AnalyticsSessionsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -98,7 +100,7 @@ export interface Config {
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: number;
+    defaultIDType: string;
   };
   fallbackLocale: null;
   globals: {};
@@ -138,7 +140,7 @@ export interface UserAuthOperations {
  * via the `definition` "case-studies".
  */
 export interface CaseStudy {
-  id: number;
+  id: string;
   /**
    * Headline of the case study, e.g. "How X scaled to $60K in 4 months".
    */
@@ -148,7 +150,7 @@ export interface CaseStudy {
    */
   slug?: string | null;
   type: 'affiliate' | 'influencer';
-  category?: (number | null) | Category;
+  category?: (string | null) | Category;
   /**
    * Show on the home page.
    */
@@ -162,7 +164,7 @@ export interface CaseStudy {
   /**
    * Pick the network whose logo should sit on this case study card. Logos are managed in Content → Networks & Platforms.
    */
-  networkLogo?: (number | null) | Network;
+  networkLogo?: (string | null) | Network;
   /**
    * e.g. Awin, Impact.com, ADCELL, Daisycon
    */
@@ -223,22 +225,22 @@ export interface CaseStudy {
   /**
    * Card image on listing pages.
    */
-  thumbnail?: (number | null) | Media;
+  thumbnail?: (string | null) | Media;
   /**
    * Large image at the top of the case study.
    */
-  heroImage?: (number | null) | Media;
+  heroImage?: (string | null) | Media;
   /**
    * Screenshot of results/stats shown near the outcome.
    */
-  resultsImage?: (number | null) | Media;
+  resultsImage?: (string | null) | Media;
   /**
    * Upload one or more campaign videos, or embed from YouTube/Instagram/TikTok.
    */
   videos?:
     | {
         source?: ('upload' | 'embed') | null;
-        video?: (number | null) | Media;
+        video?: (string | null) | Media;
         /**
          * YouTube / Instagram / TikTok link
          */
@@ -257,7 +259,7 @@ export interface CaseStudy {
  * via the `definition` "categories".
  */
 export interface Category {
-  id: number;
+  id: string;
   name: string;
   /**
    * URL identifier — leave blank to auto-generate from the title.
@@ -278,12 +280,12 @@ export interface Category {
  * via the `definition` "networks".
  */
 export interface Network {
-  id: number;
+  id: string;
   name: string;
   /**
    * Recommended size — SVG (any size, scales perfectly), or a transparent PNG at 600 × 200 px (minimum 400 × 150 px). Use the horizontal logo trimmed of surrounding whitespace. It renders up to 176 × 67 px in the circle, so the extra pixels keep it sharp on retina screens. Keep files under ~150 KB.
    */
-  logo?: (number | null) | Media;
+  logo?: (string | null) | Media;
   /**
    * Brand hex colour, e.g. #ff6b00
    */
@@ -306,7 +308,7 @@ export interface Network {
  * via the `definition` "media".
  */
 export interface Media {
-  id: number;
+  id: string;
   alt?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -353,7 +355,7 @@ export interface Media {
  * via the `definition` "reviews".
  */
 export interface Review {
-  id: number;
+  id: string;
   reviewerName: string;
   /**
    * e.g. "Founder, Even Skyn" (optional)
@@ -376,9 +378,9 @@ export interface Review {
   /**
    * Screenshot of the review (WhatsApp, LinkedIn, email…).
    */
-  image?: (number | null) | Media;
+  image?: (string | null) | Media;
   videoSource?: ('upload' | 'embed') | null;
-  video?: (number | null) | Media;
+  video?: (string | null) | Media;
   /**
    * YouTube / Instagram / TikTok link
    */
@@ -393,7 +395,7 @@ export interface Review {
  * via the `definition` "audit-requests".
  */
 export interface AuditRequest {
-  id: number;
+  id: string;
   name: string;
   email: string;
   company?: string | null;
@@ -436,6 +438,18 @@ export interface AuditRequest {
    */
   notes?: string | null;
   source?: string | null;
+  /**
+   * Where this sits on the CRM board.
+   */
+  stage?: ('new' | 'connected' | 'won' | 'lost') | null;
+  connectedAt?: string | null;
+  wonAt?: string | null;
+  /**
+   * What the deal is worth.
+   */
+  dealValue?: number | null;
+  dealTerms?: string | null;
+  lostReason?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -446,7 +460,7 @@ export interface AuditRequest {
  * via the `definition` "leads".
  */
 export interface Lead {
-  id: number;
+  id: string;
   name: string;
   email: string;
   websiteUrl?: string | null;
@@ -480,6 +494,18 @@ export interface Lead {
    */
   notes?: string | null;
   source?: string | null;
+  /**
+   * Where this sits on the CRM board.
+   */
+  stage?: ('new' | 'connected' | 'won' | 'lost') | null;
+  connectedAt?: string | null;
+  wonAt?: string | null;
+  /**
+   * What the deal is worth.
+   */
+  dealValue?: number | null;
+  dealTerms?: string | null;
+  lostReason?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -490,7 +516,7 @@ export interface Lead {
  * via the `definition` "contact-submissions".
  */
 export interface ContactSubmission {
-  id: number;
+  id: string;
   name: string;
   email: string;
   company?: string | null;
@@ -498,6 +524,77 @@ export interface ContactSubmission {
   service?: ('affiliate' | 'influencer' | 'both' | 'other') | null;
   budget?: ('under-1k' | '1k-3k' | '3k-10k' | '10k-plus') | null;
   message: string;
+  /**
+   * Where this sits on the CRM board.
+   */
+  stage?: ('new' | 'connected' | 'won' | 'lost') | null;
+  connectedAt?: string | null;
+  wonAt?: string | null;
+  /**
+   * What the deal is worth.
+   */
+  dealValue?: number | null;
+  dealTerms?: string | null;
+  lostReason?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Every visit to the site: where the visitor came from, each page and click in order, and how long they stayed.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "analytics-sessions".
+ */
+export interface AnalyticsSession {
+  id: string;
+  summary?: string | null;
+  /**
+   * One browsing session. Resets after 30 minutes idle.
+   */
+  sessionId: string;
+  /**
+   * Same person across sessions — filter by this to see return visits.
+   */
+  visitorId?: string | null;
+  startedAt?: string | null;
+  lastSeenAt?: string | null;
+  durationSeconds?: number | null;
+  location?: string | null;
+  country?: string | null;
+  region?: string | null;
+  city?: string | null;
+  /**
+   * Masked — the final octet is dropped, so it identifies a network, not a household.
+   */
+  ip?: string | null;
+  device?: ('desktop' | 'mobile' | 'tablet' | 'unknown') | null;
+  browser?: string | null;
+  os?: string | null;
+  landingPath?: string | null;
+  exitPath?: string | null;
+  /**
+   * Empty means direct or a private referrer.
+   */
+  referrer?: string | null;
+  touchpointCount?: number | null;
+  pageviews?: number | null;
+  clicks?: number | null;
+  converted?: boolean | null;
+  conversionLabel?: string | null;
+  /**
+   * Every step in order — first touch at the top, most recent at the bottom.
+   */
+  touchpoints?:
+    | {
+        type: 'pageview' | 'click' | 'outbound' | 'form' | 'video' | 'conversion';
+        at?: string | null;
+        seconds?: number | null;
+        label?: string | null;
+        path?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  userAgent?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -506,7 +603,7 @@ export interface ContactSubmission {
  * via the `definition` "users".
  */
 export interface User {
-  id: number;
+  id: string;
   name?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -532,7 +629,7 @@ export interface User {
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: number;
+  id: string;
   key: string;
   data:
     | {
@@ -549,48 +646,52 @@ export interface PayloadKv {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: number;
+  id: string;
   document?:
     | ({
         relationTo: 'case-studies';
-        value: number | CaseStudy;
+        value: string | CaseStudy;
       } | null)
     | ({
         relationTo: 'categories';
-        value: number | Category;
+        value: string | Category;
       } | null)
     | ({
         relationTo: 'reviews';
-        value: number | Review;
+        value: string | Review;
       } | null)
     | ({
         relationTo: 'networks';
-        value: number | Network;
+        value: string | Network;
       } | null)
     | ({
         relationTo: 'media';
-        value: number | Media;
+        value: string | Media;
       } | null)
     | ({
         relationTo: 'audit-requests';
-        value: number | AuditRequest;
+        value: string | AuditRequest;
       } | null)
     | ({
         relationTo: 'leads';
-        value: number | Lead;
+        value: string | Lead;
       } | null)
     | ({
         relationTo: 'contact-submissions';
-        value: number | ContactSubmission;
+        value: string | ContactSubmission;
+      } | null)
+    | ({
+        relationTo: 'analytics-sessions';
+        value: string | AnalyticsSession;
       } | null)
     | ({
         relationTo: 'users';
-        value: number | User;
+        value: string | User;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -600,10 +701,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: number;
+  id: string;
   user: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
   key?: string | null;
   value?:
@@ -623,7 +724,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: number;
+  id: string;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -812,6 +913,12 @@ export interface AuditRequestsSelect<T extends boolean = true> {
   status?: T;
   notes?: T;
   source?: T;
+  stage?: T;
+  connectedAt?: T;
+  wonAt?: T;
+  dealValue?: T;
+  dealTerms?: T;
+  lostReason?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -848,6 +955,12 @@ export interface LeadsSelect<T extends boolean = true> {
   status?: T;
   notes?: T;
   source?: T;
+  stage?: T;
+  connectedAt?: T;
+  wonAt?: T;
+  dealValue?: T;
+  dealTerms?: T;
+  lostReason?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -863,6 +976,53 @@ export interface ContactSubmissionsSelect<T extends boolean = true> {
   service?: T;
   budget?: T;
   message?: T;
+  stage?: T;
+  connectedAt?: T;
+  wonAt?: T;
+  dealValue?: T;
+  dealTerms?: T;
+  lostReason?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "analytics-sessions_select".
+ */
+export interface AnalyticsSessionsSelect<T extends boolean = true> {
+  summary?: T;
+  sessionId?: T;
+  visitorId?: T;
+  startedAt?: T;
+  lastSeenAt?: T;
+  durationSeconds?: T;
+  location?: T;
+  country?: T;
+  region?: T;
+  city?: T;
+  ip?: T;
+  device?: T;
+  browser?: T;
+  os?: T;
+  landingPath?: T;
+  exitPath?: T;
+  referrer?: T;
+  touchpointCount?: T;
+  pageviews?: T;
+  clicks?: T;
+  converted?: T;
+  conversionLabel?: T;
+  touchpoints?:
+    | T
+    | {
+        type?: T;
+        at?: T;
+        seconds?: T;
+        label?: T;
+        path?: T;
+        id?: T;
+      };
+  userAgent?: T;
   updatedAt?: T;
   createdAt?: T;
 }

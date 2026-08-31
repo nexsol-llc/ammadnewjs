@@ -37,10 +37,10 @@ export default async function ServicesPage() {
       <ServicesHero />
       <NetworkStrip networks={networks} />
 
-      <ServicesSection />
+      <ServicesSection tightTop />
       <StatsBand />
 
-      <section className="section-alt relative py-24 md:py-32">
+      <section className="section-alt relative py-16 md:py-20">
         <div className="container-x">
           <SectionHeading
             eyebrow="Why an operator"

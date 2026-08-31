@@ -1,5 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { anyone, authenticated } from '@/access'
+import { crmFields } from '@/fields/crm'
+import { notifyOnCreate } from '@/lib/notify'
 
 const symbols: Record<string, string> = { USD: '$', GBP: '£', EUR: '€' }
 
@@ -33,6 +35,14 @@ export const Leads: CollectionConfig = {
     delete: authenticated,
   },
   hooks: {
+    afterChange: [
+      notifyOnCreate('Revenue calculator lead', (d) => [
+        ['Name', d.name],
+        ['Email', d.email],
+        ['Website', d.websiteUrl],
+        ['Summary', d.summary],
+      ]),
+    ],
     beforeChange: [
       ({ data, originalDoc }) => {
         // Partial updates (e.g. changing status) only send changed keys — merge first.
@@ -174,5 +184,7 @@ export const Leads: CollectionConfig = {
       defaultValue: 'revenue-calculator',
       admin: { position: 'sidebar', readOnly: true },
     },
+
+    ...crmFields,
   ],
 }

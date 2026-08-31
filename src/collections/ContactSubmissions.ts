@@ -1,5 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { anyone, authenticated } from '@/access'
+import { crmFields } from '@/fields/crm'
+import { notifyOnCreate } from '@/lib/notify'
 
 export const ContactSubmissions: CollectionConfig = {
   slug: 'contact-submissions',
@@ -14,6 +16,17 @@ export const ContactSubmissions: CollectionConfig = {
     read: authenticated,
     update: authenticated,
     delete: authenticated,
+  },
+  hooks: {
+    afterChange: [
+      notifyOnCreate('Contact form message', (d) => [
+        ['Name', d.name],
+        ['Email', d.email],
+        ['Service', d.service],
+        ['Budget', d.budget],
+        ['Message', d.message],
+      ]),
+    ],
   },
   fields: [
     { name: 'name', type: 'text', required: true },
@@ -41,5 +54,7 @@ export const ContactSubmissions: CollectionConfig = {
       ],
     },
     { name: 'message', type: 'textarea', required: true },
+
+    ...crmFields,
   ],
 }

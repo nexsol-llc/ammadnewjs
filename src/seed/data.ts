@@ -212,9 +212,9 @@ export const influencerSeeds: InfluencerSeed[] = [
 
 export const reviewSeeds = {
   videos: [
-    { file: 'ammad.mp4', reviewerName: 'Brand Partner — Video Review', role: 'E-commerce founder' },
-    { file: 'ac.mp4', reviewerName: 'Client Testimonial', role: 'Brand owner' },
-    { file: 'ab.mov', reviewerName: 'Client Testimonial', role: 'Marketing lead' },
+    { file: 'ammad.mp4', reviewerName: 'Mike', role: 'Founder in Fashion Niche' },
+    { file: 'ac.mp4', reviewerName: 'Rohny', role: 'Founder in SaaS Niche' },
+    { file: 'ab.mov', reviewerName: 'Robert', role: 'Founder in Skincare Niche' },
   ],
   images: [
     { file: 'Andre.png', reviewerName: 'Andre', role: 'Brand partner' },

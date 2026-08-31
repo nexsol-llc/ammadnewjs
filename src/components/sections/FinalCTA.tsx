@@ -11,7 +11,7 @@ const bullets = [
 
 export function FinalCTA() {
   return (
-    <section className="relative overflow-hidden bg-ink-950 py-24 md:py-32">
+    <section className="relative overflow-hidden bg-ink-950 py-16 md:py-20">
       <div className="mesh-dark absolute inset-0" />
       <div className="container-x relative">
         <div className="mx-auto max-w-3xl text-center">

@@ -119,7 +119,7 @@ export function RevenueCalculator({ networks = [] }: { networks?: NetworkInfo[] 
   const cur = form.currency
 
   return (
-    <section id="revenue-calculator" className="relative scroll-mt-24 overflow-hidden bg-ink-950 py-20 md:py-28">
+    <section id="revenue-calculator" className="relative scroll-mt-24 overflow-hidden bg-ink-950 py-16 md:py-20">
       <div className="mesh-dark absolute inset-0" />
       <div className="container-x relative">
         <div className="mb-12 flex flex-col items-center gap-4 text-center">
@@ -235,7 +235,7 @@ export function RevenueCalculator({ networks = [] }: { networks?: NetworkInfo[] 
                   id="rc-commission"
                   type="range"
                   min="1"
-                  max="30"
+                  max="50"
                   step="1"
                   value={form.commissionRate}
                   onChange={(e) => set('commissionRate', Number(e.target.value))}
@@ -243,7 +243,7 @@ export function RevenueCalculator({ networks = [] }: { networks?: NetworkInfo[] 
                 <div className="mt-1.5 flex justify-between text-[0.68rem] text-white/35">
                   <span>1%</span>
                   <span>Typical: 8–15%</span>
-                  <span>30%</span>
+                  <span>50%</span>
                 </div>
               </div>
 
@@ -318,7 +318,13 @@ export function RevenueCalculator({ networks = [] }: { networks?: NetworkInfo[] 
                   />
                 </div>
 
-                <div className="mt-7 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                <p className="mt-6 text-xs leading-relaxed text-white/40">
+                  These numbers are an illustration, not a promise. Real results vary with your
+                  pricing, margins, product reviews, seasonality, competition, and how the program is
+                  run.
+                </p>
+
+                <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
                   <p className="text-sm text-white/70">
                     Want the version built on your real analytics instead of benchmarks?
                   </p>
@@ -350,8 +356,7 @@ export function RevenueCalculator({ networks = [] }: { networks?: NetworkInfo[] 
                 </span>
                 <p className="heading mt-5 text-xl text-white">Your projection is ready</p>
                 <p className="mt-2 max-w-xs text-sm text-white/45">
-                  Fill in your numbers on the left, then unlock a full month-by-month revenue
-                  breakdown.
+                  Fill in your numbers, then unlock a full month-by-month revenue breakdown.
                 </p>
                 <div
                   aria-hidden

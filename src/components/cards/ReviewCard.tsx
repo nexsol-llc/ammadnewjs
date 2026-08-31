@@ -16,7 +16,10 @@ export function ReviewCard({ review }: { review: ReviewItem }) {
             embedUrl: review.embedUrl,
             caption: `${review.reviewerName} — video review`,
           }}
-          className="aspect-video w-full"
+          /* The reviews are filmed on phones, so the frame is portrait. A 16:9
+             box cropped straight through the middle of the face; 4:5 keeps the
+             head in shot and leaves far less letterboxing on playback. */
+          className="aspect-[4/5] w-full"
         />
       ) : review.image?.url ? (
         <div className="relative overflow-hidden rounded-xl border border-line bg-surface-2">

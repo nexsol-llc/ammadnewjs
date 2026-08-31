@@ -14,6 +14,7 @@ export const site = {
 }
 
 export const nav = [
+  { label: 'Home', href: '/' },
   { label: 'Services', href: '/services' },
   { label: 'Case Studies', href: '/case-studies' },
   { label: 'Testimonials', href: '/testimonials' },
@@ -77,7 +78,7 @@ export const headlineStats = [
   { value: 350, prefix: '$', suffix: 'K+', label: 'Tracked partner revenue' },
   { value: 30.7, prefix: '', suffix: 'x', label: 'Best campaign ROAS', decimals: 1 },
   { value: 700, prefix: '', suffix: '+', label: 'Partners recruited' },
-  { value: 15, prefix: '', suffix: '+', label: 'Brands scaled worldwide' },
+  { value: 1000, prefix: '', suffix: '+', label: 'Brands scaled worldwide' },
 ]
 
 /** The engagement road map — what happens, and when. */
@@ -135,7 +136,7 @@ export const faqs = [
   },
   {
     q: 'Do I need an existing affiliate program?',
-    a: 'No. I build programs from zero — network selection, commission structure, tracking, creatives, and recruitment. If you already have a program that is underperforming, I audit and restructure it instead.',
+    a: 'Either way works. Starting from zero, I build the whole thing — network selection, commission structure, tracking, creatives, and recruitment. If you already have a program, I audit before changing anything: where your current network fits your niche and target regions, I keep it and optimise what is already there. Where it does not, I will show you why and recommend a better-fitting network, then handle the migration so your existing partners come across with you.',
   },
   {
     q: 'How accurate is the revenue calculator?',
@@ -183,13 +184,31 @@ export const services = {
   extras: [
     {
       title: 'Partnership Management',
+      tagline: 'Your partners actively managed, not left to run themselves.',
       description:
-        'Ongoing partner communication, commission management, retention, and performance optimisation.',
+        'The day-to-day work that keeps a program compounding after launch — partner communication, commission management, retention, and monthly performance optimisation.',
+      features: [
+        'Monthly partner check-ins',
+        'Commission & tier adjustments',
+        'Top-partner retention plans',
+        'Dormant partner re-activation',
+        'Placement & newsletter negotiation',
+        'Payout and invoice oversight',
+      ],
     },
     {
       title: 'Influencer Outreach',
+      tagline: 'A creator pipeline that keeps filling itself.',
       description:
-        'Done-for-you creator sourcing and outreach pipelines — research, first contact, negotiation, and onboarding.',
+        'Done-for-you creator sourcing and outreach — research, first contact, negotiation, and onboarding, run as a repeatable pipeline instead of one-off DMs.',
+      features: [
+        'Niche & audience research',
+        'Personalised first contact',
+        'Rate negotiation & contracts',
+        'Structured follow-up sequences',
+        'Onboarding & brief handover',
+        'Weekly pipeline reporting',
+      ],
     },
   ],
 }
