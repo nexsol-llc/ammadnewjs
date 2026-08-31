@@ -7,7 +7,8 @@
  *
  * Sources:
  *  - seed-assets/projects.json  → 11 affiliate case studies (images on Cloudinary)
- *  - src/seed/data.ts           → outcomes/networks + 6 influencer campaigns
+ *  - src/seed/data.ts           → outcomes + 6 influencer campaigns
+ *  - src/lib/site.ts            → networks & platforms (names + brand colours)
  *  - seed-assets/videos, images → campaign videos & review media
  */
 import config from '@payload-config'
@@ -16,6 +17,7 @@ import crypto from 'crypto'
 import fs from 'fs'
 import path from 'path'
 import { slugify } from '../fields/slug'
+import { networks as networkSeeds } from '../lib/site'
 import { affiliateExtras, influencerSeeds, reviewSeeds } from './data'
 
 const ROOT = process.cwd()
@@ -139,6 +141,31 @@ async function main() {
     console.log(`  email:    ${email}`)
     console.log(`  password: ${password}`)
     console.log('━'.repeat(56) + '\n')
+  }
+
+  // ── Networks & platforms ──────────────────────────────────────
+  // These feed the hero orbit, the services logo strip and the calculator's
+  // network select. They had only ever been hand-entered in the admin, so the
+  // move to Mongo left the collection empty and the orbit rendered nothing.
+  // Logos still have to be uploaded by hand; NetworkOrbit falls back to a
+  // wordmark until one exists, so the circle works either way.
+  let netOrder = 0
+  for (const n of networkSeeds) {
+    const exists = await payload.find({
+      collection: 'networks',
+      where: { name: { equals: n.name } },
+      limit: 1,
+    })
+    if (exists.docs.length) {
+      console.log(`✓ exists: network — ${n.name}`)
+      netOrder++
+      continue
+    }
+    await payload.create({
+      collection: 'networks',
+      data: { name: n.name, color: n.color, order: netOrder++, active: true },
+    })
+    console.log(`＋ network: ${n.name}`)
   }
 
   // ── Affiliate case studies (from legacy projects.json) ────────
@@ -324,9 +351,10 @@ async function main() {
     payload.count({ collection: 'categories' }),
     payload.count({ collection: 'reviews' }),
     payload.count({ collection: 'media' }),
+    payload.count({ collection: 'networks' }),
   ])
   console.log(
-    `\nDone — ${counts[0].totalDocs} case studies · ${counts[1].totalDocs} categories · ${counts[2].totalDocs} reviews · ${counts[3].totalDocs} media files`,
+    `\nDone — ${counts[0].totalDocs} case studies · ${counts[1].totalDocs} categories · ${counts[2].totalDocs} reviews · ${counts[3].totalDocs} media files · ${counts[4].totalDocs} networks`,
   )
   process.exit(0)
 }
