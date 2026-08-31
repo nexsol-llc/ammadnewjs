@@ -194,8 +194,14 @@ export async function POST(req: Request) {
     return new NextResponse(null, { status: 204 })
   }
 
+  /* Cloudflare sits in front of Vercel, so cf-connecting-ip is the visitor and
+     x-forwarded-for starts with them too. Fall back through both. */
   const forwarded = headers.get('x-forwarded-for') || ''
-  const ip = maskIp(str(forwarded.split(',')[0], 60) || str(headers.get('x-real-ip'), 60))
+  const ip = maskIp(
+    str(headers.get('cf-connecting-ip'), 60) ||
+      str(forwarded.split(',')[0], 60) ||
+      str(headers.get('x-real-ip'), 60),
+  )
   const first = touchpoints[0]
 
   if (Math.random() < PRUNE_CHANCE) {
@@ -218,10 +224,13 @@ export async function POST(req: Request) {
       landingPath: first.path,
       referrer: str(body.referrer, 300),
       ip,
-      // Vercel and Cloudflare both resolve location at the edge for us.
-      country: decode(headers.get('x-vercel-ip-country') || headers.get('cf-ipcountry')),
+      /* Cloudflare's reading wins when it is present: behind its proxy, Vercel
+         only sees a Cloudflare data centre, so its country would be the edge
+         location rather than the visitor's. Without the proxy the cf-* headers
+         are absent and Vercel's are correct. */
+      country: decode(headers.get('cf-ipcountry') || headers.get('x-vercel-ip-country')),
       region: decode(headers.get('x-vercel-ip-country-region')),
-      city: decode(headers.get('x-vercel-ip-city')),
+      city: decode(headers.get('cf-ipcity') || headers.get('x-vercel-ip-city')),
       userAgent: userAgent.slice(0, 400),
       ...parseUserAgent(userAgent),
     },
