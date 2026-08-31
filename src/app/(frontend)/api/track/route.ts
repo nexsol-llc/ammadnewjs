@@ -224,13 +224,18 @@ export async function POST(req: Request) {
       landingPath: first.path,
       referrer: str(body.referrer, 300),
       ip,
-      /* Cloudflare's reading wins when it is present: behind its proxy, Vercel
-         only sees a Cloudflare data centre, so its country would be the edge
-         location rather than the visitor's. Without the proxy the cf-* headers
-         are absent and Vercel's are correct. */
-      country: decode(headers.get('cf-ipcountry') || headers.get('x-vercel-ip-country')),
-      region: decode(headers.get('x-vercel-ip-country-region')),
-      city: decode(headers.get('cf-ipcity') || headers.get('x-vercel-ip-city')),
+      /* Behind Cloudflare's proxy Vercel only sees a Cloudflare data centre, so
+         its geo headers describe the edge, not the visitor — mixing the two
+         produced readings like "Singapore, PK". When Cloudflare is in front we
+         take only what it gives us and leave the rest empty, because a blank
+         city is honest and a wrong one is not. */
+      ...(headers.get('cf-ipcountry')
+        ? { country: decode(headers.get('cf-ipcountry')) }
+        : {
+            country: decode(headers.get('x-vercel-ip-country')),
+            region: decode(headers.get('x-vercel-ip-country-region')),
+            city: decode(headers.get('x-vercel-ip-city')),
+          }),
       userAgent: userAgent.slice(0, 400),
       ...parseUserAgent(userAgent),
     },
