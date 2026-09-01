@@ -77,6 +77,36 @@ const PANEL = {
   borderRadius: 8,
 }
 
+/** The one key a card is tracked by — ids are only unique within a collection. */
+const keyOf = (card: Pick<Card, 'collection' | 'id'>) => `${card.collection}:${card.id}`
+
+function SelectBox({
+  checked,
+  indeterminate,
+  onChange,
+  label,
+}: {
+  checked: boolean
+  indeterminate?: boolean
+  onChange: (checked: boolean) => void
+  label: string
+}) {
+  return (
+    <input
+      type="checkbox"
+      aria-label={label}
+      title={label}
+      checked={checked}
+      // Partly-filled columns read as a dash rather than an empty box.
+      ref={(el) => {
+        if (el) el.indeterminate = Boolean(indeterminate) && !checked
+      }}
+      onChange={(e) => onChange(e.target.checked)}
+      style={{ cursor: 'pointer', width: 15, height: 15, accentColor: '#6d4aff', margin: 0 }}
+    />
+  )
+}
+
 function Stat({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
     <div style={{ ...PANEL, padding: '0.9rem 1.1rem' }}>
@@ -123,6 +153,11 @@ export function CrmBoard() {
   const [over, setOver] = useState<string | null>(null)
   const [draft, setDraft] = useState<Draft | null>(null)
   const [saving, setSaving] = useState(false)
+  /* Selection is held as `collection:id` keys so it survives a reload of the
+     board without pinning stale copies of the cards themselves. */
+  const [selected, setSelected] = useState<Set<string>>(new Set())
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   const load = useCallback(() => {
     fetch('/api/crm/board', { credentials: 'include' })
@@ -145,6 +180,49 @@ export function CrmBoard() {
     }
     return map
   }, [board])
+
+  /* Only cards still on the board count: a lead deleted in another tab must not
+     keep a ghost in the selection. */
+  const chosen = useMemo(
+    () => (board?.cards || []).filter((c) => selected.has(keyOf(c))),
+    [board, selected],
+  )
+
+  const setMany = (cards: Card[], on: boolean) =>
+    setSelected((prev) => {
+      const next = new Set(prev)
+      for (const card of cards) {
+        if (on) next.add(keyOf(card))
+        else next.delete(keyOf(card))
+      }
+      return next
+    })
+
+  const removeChosen = async () => {
+    if (!chosen.length) return
+    setDeleting(true)
+    try {
+      const res = await fetch('/api/crm/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          items: chosen.map((c) => ({ collection: c.collection, id: c.id })),
+        }),
+      })
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}))
+        setError(body.error || 'Could not delete those leads.')
+        return
+      }
+      setError(null)
+      setSelected(new Set())
+      setConfirmDelete(false)
+      load()
+    } finally {
+      setDeleting(false)
+    }
+  }
 
   const commit = async (payload: Record<string, unknown>) => {
     setSaving(true)
@@ -260,6 +338,80 @@ export function CrmBoard() {
             <Stat label="Revenue won" value={money(board.overview.wonValue)} />
           </div>
 
+          {/* Bulk selection — tick cards, or take the whole board at once. */}
+          <div
+            style={{
+              ...PANEL,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              flexWrap: 'wrap',
+              marginBottom: '0.9rem',
+              padding: '0.55rem 0.75rem',
+            }}
+          >
+            <label
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                cursor: 'pointer',
+                fontSize: '0.8rem',
+                color: 'var(--theme-elevation-700)',
+              }}
+            >
+              <SelectBox
+                label="Select every lead"
+                checked={board.cards.length > 0 && chosen.length === board.cards.length}
+                indeterminate={chosen.length > 0}
+                onChange={(on) => setMany(board.cards, on)}
+              />
+              Select all ({board.cards.length})
+            </label>
+
+            <span style={{ fontSize: '0.8rem', color: 'var(--theme-elevation-500)' }}>
+              {chosen.length ? `${chosen.length} selected` : 'Nothing selected'}
+            </span>
+
+            {chosen.length ? (
+              <button
+                type="button"
+                onClick={() => setSelected(new Set())}
+                style={{
+                  cursor: 'pointer',
+                  padding: '0.3rem 0.7rem',
+                  borderRadius: 6,
+                  border: '1px solid var(--theme-elevation-150)',
+                  background: 'transparent',
+                  color: 'var(--theme-elevation-700)',
+                  fontSize: '0.78rem',
+                }}
+              >
+                Clear
+              </button>
+            ) : null}
+
+            <button
+              type="button"
+              disabled={!chosen.length}
+              onClick={() => setConfirmDelete(true)}
+              style={{
+                marginLeft: 'auto',
+                cursor: chosen.length ? 'pointer' : 'not-allowed',
+                padding: '0.35rem 0.9rem',
+                borderRadius: 6,
+                border: '1px solid',
+                borderColor: chosen.length ? '#ef4444' : 'var(--theme-elevation-150)',
+                background: chosen.length ? '#ef4444' : 'transparent',
+                color: chosen.length ? '#fff' : 'var(--theme-elevation-400)',
+                fontWeight: 600,
+                fontSize: '0.78rem',
+              }}
+            >
+              Delete selected{chosen.length ? ` (${chosen.length})` : ''}
+            </button>
+          </div>
+
           <div style={{ display: 'flex', gap: '0.7rem', overflowX: 'auto', paddingBottom: '0.6rem' }}>
             {COLUMNS.map((column) => {
               const cards = byColumn.get(column.key) || []
@@ -300,102 +452,134 @@ export function CrmBoard() {
                     <span style={{ fontSize: '0.72rem', color: 'var(--theme-elevation-450)' }}>
                       {cards.length}
                     </span>
+                    {cards.length ? (
+                      <span style={{ marginLeft: 'auto', display: 'flex' }}>
+                        <SelectBox
+                          label={`Select every lead in ${column.title}`}
+                          checked={cards.every((c) => selected.has(keyOf(c)))}
+                          indeterminate={cards.some((c) => selected.has(keyOf(c)))}
+                          onChange={(on) => setMany(cards, on)}
+                        />
+                      </span>
+                    ) : null}
                   </header>
 
-                  {cards.map((card) => (
-                    <article
-                      key={`${card.collection}-${card.id}`}
-                      draggable
-                      onDragStart={(e) => {
-                        held.current = card
-                        setDragging(card)
-                        e.dataTransfer.effectAllowed = 'move'
-                      }}
-                      onDragEnd={() => {
-                        held.current = null
-                        setDragging(null)
-                      }}
-                      style={{
-                        background: 'var(--theme-elevation-50)',
-                        border: '1px solid var(--theme-elevation-150)',
-                        borderLeft: `3px solid ${column.tone}`,
-                        borderRadius: 6,
-                        padding: '0.6rem 0.7rem',
-                        marginBottom: '0.5rem',
-                        cursor: 'grab',
-                        opacity: dragging?.id === card.id && dragging.collection === card.collection ? 0.4 : 1,
-                      }}
-                    >
-                      <div
+                  {cards.map((card) => {
+                    const picked = selected.has(keyOf(card))
+                    return (
+                      <article
+                        key={`${card.collection}-${card.id}`}
+                        draggable
+                        onDragStart={(e) => {
+                          held.current = card
+                          setDragging(card)
+                          e.dataTransfer.effectAllowed = 'move'
+                        }}
+                        onDragEnd={() => {
+                          held.current = null
+                          setDragging(null)
+                        }}
                         style={{
-                          fontSize: '0.82rem',
-                          fontWeight: 600,
-                          color: 'var(--theme-elevation-900)',
+                          background: picked ? 'var(--theme-elevation-100)' : 'var(--theme-elevation-50)',
+                          border: `1px solid ${picked ? '#6d4aff' : 'var(--theme-elevation-150)'}`,
+                          borderLeft: `3px solid ${column.tone}`,
+                          borderRadius: 6,
+                          padding: '0.6rem 0.7rem',
+                          marginBottom: '0.5rem',
+                          cursor: 'grab',
+                          opacity: dragging?.id === card.id && dragging.collection === card.collection ? 0.4 : 1,
                         }}
                       >
-                        {card.name}
-                      </div>
-                      {card.email ? (
-                        <div
-                          style={{
-                            fontSize: '0.7rem',
-                            color: 'var(--theme-elevation-500)',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                          }}
-                        >
-                          {card.email}
+                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                          <div
+                            style={{
+                              flex: 1,
+                              minWidth: 0,
+                              fontSize: '0.82rem',
+                              fontWeight: 600,
+                              color: 'var(--theme-elevation-900)',
+                            }}
+                          >
+                            {card.name}
+                          </div>
+                          {/* Ticking a card must not also pick it up. */}
+                          <span
+                            style={{ display: 'flex', paddingTop: 2 }}
+                            onDragStart={(e) => {
+                              e.preventDefault()
+                              e.stopPropagation()
+                            }}
+                            onMouseDown={(e) => e.stopPropagation()}
+                          >
+                            <SelectBox
+                              label={`Select ${card.name}`}
+                              checked={picked}
+                              onChange={(on) => setMany([card], on)}
+                            />
+                          </span>
                         </div>
-                      ) : null}
-                      {card.subtitle ? (
+                        {card.email ? (
+                          <div
+                            style={{
+                              fontSize: '0.7rem',
+                              color: 'var(--theme-elevation-500)',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                            }}
+                          >
+                            {card.email}
+                          </div>
+                        ) : null}
+                        {card.subtitle ? (
+                          <div
+                            style={{
+                              fontSize: '0.7rem',
+                              color: 'var(--theme-elevation-450)',
+                              marginTop: 4,
+                              display: '-webkit-box',
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: 'vertical',
+                              overflow: 'hidden',
+                            }}
+                          >
+                            {card.subtitle}
+                          </div>
+                        ) : null}
+
                         <div
                           style={{
-                            fontSize: '0.7rem',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            gap: 6,
+                            marginTop: 6,
+                            fontSize: '0.66rem',
                             color: 'var(--theme-elevation-450)',
-                            marginTop: 4,
-                            display: '-webkit-box',
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden',
                           }}
                         >
-                          {card.subtitle}
+                          <span>{column.source ? shortDate(card.createdAt) : SOURCE_LABEL[card.source]}</span>
+                          <span style={{ color: 'var(--theme-elevation-600)' }}>
+                            {card.stage === 'won' && card.dealValue ? money(card.dealValue) : null}
+                            {card.stage === 'connected' ? shortDate(card.connectedAt) : null}
+                            {card.stage === 'lost' ? (card.lostReason || '').slice(0, 22) : null}
+                          </span>
                         </div>
-                      ) : null}
 
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          gap: 6,
-                          marginTop: 6,
-                          fontSize: '0.66rem',
-                          color: 'var(--theme-elevation-450)',
-                        }}
-                      >
-                        <span>{column.source ? shortDate(card.createdAt) : SOURCE_LABEL[card.source]}</span>
-                        <span style={{ color: 'var(--theme-elevation-600)' }}>
-                          {card.stage === 'won' && card.dealValue ? money(card.dealValue) : null}
-                          {card.stage === 'connected' ? shortDate(card.connectedAt) : null}
-                          {card.stage === 'lost' ? (card.lostReason || '').slice(0, 22) : null}
-                        </span>
-                      </div>
-
-                      <a
-                        href={`/admin/collections/${card.collection}/${card.id}`}
-                        style={{
-                          display: 'inline-block',
-                          marginTop: 6,
-                          fontSize: '0.68rem',
-                          color: column.tone,
-                          textDecoration: 'none',
-                        }}
-                      >
-                        Open →
-                      </a>
-                    </article>
-                  ))}
+                        <a
+                          href={`/admin/collections/${card.collection}/${card.id}`}
+                          style={{
+                            display: 'inline-block',
+                            marginTop: 6,
+                            fontSize: '0.68rem',
+                            color: column.tone,
+                            textDecoration: 'none',
+                          }}
+                        >
+                          Open →
+                        </a>
+                      </article>
+                    )
+                  })}
 
                   {!cards.length ? (
                     <p
@@ -415,6 +599,77 @@ export function CrmBoard() {
             })}
           </div>
         </>
+      ) : null}
+
+      {confirmDelete ? (
+        <div
+          role="dialog"
+          aria-modal="true"
+          onClick={(e) => e.target === e.currentTarget && !deleting && setConfirmDelete(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(6,6,14,0.6)',
+            display: 'grid',
+            placeItems: 'center',
+            zIndex: 100,
+            padding: '1rem',
+          }}
+        >
+          <div
+            style={{
+              width: 'min(420px, 100%)',
+              background: 'var(--theme-bg)',
+              border: '1px solid var(--theme-elevation-150)',
+              borderRadius: 10,
+              padding: '1.4rem',
+            }}
+          >
+            <h2 style={{ margin: 0, fontSize: '1.05rem', color: 'var(--theme-elevation-1000)' }}>
+              Delete {chosen.length} lead{chosen.length === 1 ? '' : 's'}?
+            </h2>
+            <p style={{ margin: '0.5rem 0 0', fontSize: '0.82rem', color: 'var(--theme-elevation-500)' }}>
+              This removes the submissions themselves from the Inbox, not just their cards on this
+              board. It cannot be undone.
+            </p>
+
+            <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: '1.2rem' }}>
+              <button
+                type="button"
+                onClick={() => setConfirmDelete(false)}
+                disabled={deleting}
+                style={{
+                  cursor: deleting ? 'wait' : 'pointer',
+                  padding: '0.45rem 0.9rem',
+                  borderRadius: 6,
+                  border: '1px solid var(--theme-elevation-150)',
+                  background: 'transparent',
+                  color: 'var(--theme-elevation-700)',
+                  fontSize: '0.82rem',
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={deleting}
+                onClick={removeChosen}
+                style={{
+                  cursor: deleting ? 'wait' : 'pointer',
+                  padding: '0.45rem 1.1rem',
+                  borderRadius: 6,
+                  border: 'none',
+                  background: '#ef4444',
+                  color: '#fff',
+                  fontWeight: 600,
+                  fontSize: '0.82rem',
+                }}
+              >
+                {deleting ? 'Deleting…' : 'Delete'}
+              </button>
+            </div>
+          </div>
+        </div>
       ) : null}
 
       {draft ? (
