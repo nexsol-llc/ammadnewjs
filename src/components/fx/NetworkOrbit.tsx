@@ -29,10 +29,11 @@ export function NetworkOrbit({ networks }: { networks: NetworkInfo[] }) {
   const current = networks[active % networks.length]
 
   /* Chips are centred on the outer ring, so half of each one sits outside it.
-     On a phone that pushed them past the screen edge — narrowing the orbit
-     leaves the margin they need without shrinking the labels. */
+     On a phone the labels shrink instead of the orbit: a wider circle keeps the
+     inner chips clear of the centre logo, and the smaller chips keep their
+     outer half inside the screen. */
   return (
-    <div className="relative mx-auto aspect-square w-[76%] max-w-[30rem] sm:w-full">
+    <div className="relative mx-auto aspect-square w-[92%] max-w-[24rem] sm:w-full sm:max-w-[30rem]">
       {/* Ring guides */}
       <div className="absolute inset-0 rounded-full border border-line" />
       <div className="absolute inset-[13%] rounded-full border border-line" />
@@ -49,7 +50,7 @@ export function NetworkOrbit({ networks }: { networks: NetworkInfo[] }) {
       />
       <Ring
         items={inner}
-        radius={34}
+        radius={33}
         spin="animate-orbit-inner"
         counterSpin="animate-orbit-inner-rev"
         reduce={Boolean(reduce)}
@@ -58,8 +59,8 @@ export function NetworkOrbit({ networks }: { networks: NetworkInfo[] }) {
       />
 
       {/* Centre — the logo showcase */}
-      <div className="absolute inset-[30%] flex items-center justify-center">
-        <div className="card relative flex h-full w-full items-center justify-center rounded-full px-5 text-center shadow-[0_20px_60px_-20px_rgba(91,51,245,0.45)]">
+      <div className="absolute inset-[32%] flex items-center justify-center sm:inset-[30%]">
+        <div className="card relative flex h-full w-full items-center justify-center rounded-full text-center shadow-[0_20px_60px_-20px_rgba(91,51,245,0.45)]">
           <span
             className="absolute inset-0 animate-pulse-ring rounded-full border-2"
             style={{ borderColor: current.color }}
@@ -70,7 +71,7 @@ export function NetworkOrbit({ networks }: { networks: NetworkInfo[] }) {
             initial={reduce ? false : { opacity: 0, scale: 0.92 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.45, ease: [0.21, 0.6, 0.35, 1] }}
-            className="flex w-full items-center justify-center px-2"
+            className="flex h-full w-full items-center justify-center"
           >
             {current.logo?.url ? (
               <Image
@@ -79,13 +80,13 @@ export function NetworkOrbit({ networks }: { networks: NetworkInfo[] }) {
                 width={320}
                 height={120}
                 priority
-                className="h-auto max-h-[3.4rem] w-auto max-w-[9.5rem] object-contain sm:max-h-[4.2rem] sm:max-w-[11rem]"
+                className="h-auto max-h-[34%] w-auto max-w-[64%] object-contain"
                 unoptimized={current.logo.mimeType === 'image/svg+xml'}
               />
             ) : (
               // Until the official logo is uploaded, show the name as a wordmark.
               <span
-                className="heading text-center text-xl leading-tight sm:text-2xl"
+                className="heading text-center text-lg leading-tight sm:text-2xl"
                 style={{ color: current.color }}
               >
                 {current.name}
@@ -132,12 +133,12 @@ function Ring({
             {/* Cancels the ring's rotation so the label stays upright. */}
             <div className={reduce ? '' : counterSpin}>
               <div
-                className={`flex items-center gap-1.5 rounded-full border bg-white px-2.5 py-1.5 shadow-[0_4px_14px_-6px_rgba(16,16,40,0.25)] transition-all duration-500 ${
-                  small ? 'text-[0.62rem]' : 'text-[0.7rem]'
-                } ${isActive ? 'scale-110 border-brand-300 shadow-[0_8px_22px_-8px_rgba(91,51,245,0.5)]' : 'border-line'}`}
+                className={`flex items-center gap-1 rounded-full border bg-white px-2 py-1 shadow-[0_4px_14px_-6px_rgba(16,16,40,0.25)] transition-all duration-500 sm:gap-1.5 sm:px-2.5 sm:py-1.5 ${
+                  small ? 'text-[0.54rem] sm:text-[0.62rem]' : 'text-[0.58rem] sm:text-[0.7rem]'
+                } ${isActive ? 'scale-105 border-brand-300 shadow-[0_8px_22px_-8px_rgba(91,51,245,0.5)] sm:scale-110' : 'border-line'}`}
               >
                 <span
-                  className="h-1.5 w-1.5 shrink-0 rounded-full"
+                  className="h-1 w-1 shrink-0 rounded-full sm:h-1.5 sm:w-1.5"
                   style={{ background: n.color, opacity: isActive ? 1 : 0.55 }}
                 />
                 <span
