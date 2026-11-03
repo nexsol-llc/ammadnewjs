@@ -1,0 +1,133 @@
+/* Campaign video layouts: the motion the Tailwind classes can't express.
+   Both are driven by data attributes and custom properties the components set,
+   so the transitions live here and the React stays about which card is where. */
+
+/* ── Hero stack ──────────────────────────────────────────────
+   Three fanned cards. Each slot is one resting place; a card's own transition
+   carries it from the slot it had to the slot it has now. */
+.cs-stack {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  /* The tallest card is 16/9 of its width plus the fan's lean, so the box is
+     sized from the viewport the same way the cards are. */
+  height: clamp(340px, 46vw, 520px);
+  margin-inline: auto;
+  /* Vertical scrolling stays with the browser; the sideways gesture is ours. */
+  touch-action: pan-y;
+}
+
+.cs-stack-card {
+  --cs-w: clamp(168px, 21vw, 268px);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--cs-w);
+  aspect-ratio: 9 / 16;
+  /* Half of a 9:16 card's height is 0.889 of its width. */
+  margin: calc(var(--cs-w) * -0.889) 0 0 calc(var(--cs-w) * -0.5);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 24px;
+  background: var(--color-ink-900);
+  box-shadow: 0 30px 60px -24px rgba(0, 0, 0, 0.8);
+  transition:
+    transform 0.9s cubic-bezier(0.21, 0.6, 0.35, 1),
+    opacity 0.9s ease;
+}
+
+.cs-stack-card[data-slot='0'] {
+  z-index: 1;
+  transform: translateX(-34%) rotate(-9deg) scale(0.86);
+}
+.cs-stack-card[data-slot='1'] {
+  z-index: 2;
+  transform: translateX(-4%) rotate(-2deg) scale(0.93);
+}
+.cs-stack-card[data-slot='2'] {
+  z-index: 3;
+  transform: translateX(30%) rotate(6deg);
+}
+/* A case study with a single video has nothing to fan against, so it stands
+   square on rather than leaning off to one side of an empty box. */
+.cs-stack-card[data-slot='solo'] {
+  --cs-w: clamp(210px, 25vw, 300px);
+  z-index: 3;
+  transform: none;
+}
+.cs-stack-card[data-slot='out'] {
+  z-index: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-62%) rotate(-15deg) scale(0.8);
+}
+/* No transition here: a card that has faded out jumps back to the right unseen,
+   rather than flying across the stack to re-enter. */
+.cs-stack-card[data-slot='wait'] {
+  z-index: 4;
+  opacity: 0;
+  pointer-events: none;
+  transition: none;
+  transform: translateX(62%) rotate(12deg) scale(1.04);
+}
+
+/* ── Carousel ────────────────────────────────────────────────
+   --cs-o is a card's place relative to the middle (negative to the left) and
+   --cs-d its distance; both are set per card by the component. --cs-drag is the
+   live finger offset, in card widths, while a swipe is in progress. */
+.cs-reel {
+  --cs-card: clamp(208px, 24vw, 300px);
+  --cs-drag: 0;
+  position: relative;
+  width: 100%;
+  height: calc(var(--cs-card) * 16 / 9);
+  touch-action: pan-y;
+}
+
+/* The soft pool of brand colour the middle card sits on. */
+.cs-reel::before {
+  content: '';
+  position: absolute;
+  inset: 8% 18%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(109, 74, 255, 0.28), rgba(217, 70, 239, 0.1) 60%, transparent);
+  filter: blur(24px);
+  pointer-events: none;
+}
+
+.cs-reel-card {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: var(--cs-card);
+  aspect-ratio: 9 / 16;
+  margin-left: calc(var(--cs-card) / -2);
+  overflow: hidden;
+  border-radius: 28px;
+  background: var(--color-ink-900);
+  box-shadow: 0 24px 50px -28px rgba(16, 16, 40, 0.5);
+  transform: translateX(calc((var(--cs-o) + var(--cs-drag)) * 95%)) scale(calc(1 - var(--cs-d) * 0.15));
+  transition:
+    transform 0.6s cubic-bezier(0.21, 0.6, 0.35, 1),
+    opacity 0.6s ease,
+    box-shadow 0.6s ease;
+}
+
+/* While a finger is down the cards track it directly — a transition here would
+   lag the gesture by the whole 0.6s. */
+.cs-reel[data-dragging] .cs-reel-card {
+  transition: none;
+}
+
+.cs-reel-card[data-centred] {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.6),
+    0 40px 80px -30px rgba(91, 51, 245, 0.55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cs-stack-card,
+  .cs-reel-card {
+    transition: none;
+  }
+}

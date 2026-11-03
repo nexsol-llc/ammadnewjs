@@ -321,6 +321,15 @@ body {
   color: transparent;
 }
 
+/* The same accent as text-gradient, lifted for dark grounds — the indigo end of
+   the ramp disappears into an ink-950 background. */
+@utility text-gradient-light {
+  background-image: linear-gradient(96deg, #ab93ff 0%, #c4b5fd 38%, #f5a9f0 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
 @utility heading {
   font-family: var(--font-display);
   color: var(--color-ink-950);

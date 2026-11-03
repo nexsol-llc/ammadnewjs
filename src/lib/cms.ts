@@ -14,11 +14,34 @@ export type MediaInfo = {
   heroUrl?: string
 }
 
+export type VideoPlatform = 'instagram' | 'tiktok' | 'youtube'
+
 export type VideoItem = {
+  id: string
   source: 'upload' | 'embed'
   media?: MediaInfo
   embedUrl?: string
   caption?: string
+  poster?: MediaInfo
+  handle?: string
+  platform?: VideoPlatform
+  niche?: string
+  views?: string
+}
+
+/** Editable copy for the dark hero at the top of an influencer case study. */
+export type CaseStudyHero = {
+  eyebrow?: string
+  headlineStart?: string
+  headlineAccent?: string
+  headlineEnd?: string
+  description?: string
+  primaryCtaLabel?: string
+  primaryCtaUrl?: string
+  secondaryCtaLabel?: string
+  secondaryCtaUrl?: string
+  trustNote?: string
+  stats: { value: string; label: string }[]
 }
 
 export type MetricItem = { label: string; value: string; change?: string }
@@ -50,6 +73,7 @@ export type CaseStudyItem = {
     brandPartner?: string
     brandUrl?: string
   }
+  hero?: CaseStudyHero
   metrics: MetricItem[]
   overview?: string
   problem?: string
@@ -113,6 +137,34 @@ const mapCategory = (c: any): CategoryInfo | undefined => {
   }
 }
 
+/* Payload always returns the group, so an untouched hero arrives as a bag of
+   empty strings. Dropping it entirely lets the page fall back to the title and
+   overview instead of rendering a headline made of nothing. */
+const mapHero = (h: any): CaseStudyHero | undefined => {
+  if (!h || typeof h !== 'object') return undefined
+  const hero: CaseStudyHero = {
+    eyebrow: h.eyebrow || undefined,
+    headlineStart: h.headlineStart || undefined,
+    headlineAccent: h.headlineAccent || undefined,
+    headlineEnd: h.headlineEnd || undefined,
+    description: h.description || undefined,
+    primaryCtaLabel: h.primaryCtaLabel || undefined,
+    primaryCtaUrl: h.primaryCtaUrl || undefined,
+    secondaryCtaLabel: h.secondaryCtaLabel || undefined,
+    secondaryCtaUrl: h.secondaryCtaUrl || undefined,
+    /* An empty string here is a decision — the client cleared the note to drop
+       the trust row — so unlike the others it is not flattened to undefined. */
+    trustNote: typeof h.trustNote === 'string' ? h.trustNote : undefined,
+    stats: (h.stats || [])
+      .filter((s: any) => s?.value && s?.label)
+      .map((s: any) => ({ value: s.value, label: s.label })),
+  }
+  const filled =
+    hero.trustNote === '' ||
+    Object.values(hero).some((v) => (Array.isArray(v) ? v.length > 0 : Boolean(v)))
+  return filled ? hero : undefined
+}
+
 const mapCaseStudy = (d: any): CaseStudyItem => ({
   id: String(d.id),
   title: d.title,
@@ -134,6 +186,7 @@ const mapCaseStudy = (d: any): CaseStudyItem => ({
         brandUrl: d.influencer.brandUrl || undefined,
       }
     : undefined,
+  hero: mapHero(d.hero),
   metrics: (d.metrics || []).map((m: any) => ({
     label: m.label,
     value: m.value,
@@ -148,11 +201,17 @@ const mapCaseStudy = (d: any): CaseStudyItem => ({
   heroImage: mapMedia(d.heroImage),
   resultsImage: mapMedia(d.resultsImage),
   videos: (d.videos || [])
-    .map((v: any) => ({
+    .map((v: any, i: number) => ({
+      id: String(v.id ?? i),
       source: v.source || 'upload',
       media: mapMedia(v.video),
       embedUrl: v.embedUrl || undefined,
       caption: v.caption || undefined,
+      poster: mapMedia(v.poster),
+      handle: v.handle || undefined,
+      platform: v.platform || undefined,
+      niche: v.niche || undefined,
+      views: v.views || undefined,
     }))
     .filter((v: VideoItem) => v.media || v.embedUrl),
 })

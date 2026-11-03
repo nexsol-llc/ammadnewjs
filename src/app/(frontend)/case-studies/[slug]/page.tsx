@@ -2,11 +2,12 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowLeft, ArrowUpRight, CheckCircle2, Globe, TrendingUp } from 'lucide-react'
+import { ArrowLeft, ArrowUpRight, CheckCircle2, TrendingUp } from 'lucide-react'
 import { Reveal, Stagger, StaggerItem } from '@/components/ui/Reveal'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { CaseStudyCard } from '@/components/cards/CaseStudyCard'
-import { VideoPlayer } from '@/components/media/VideoPlayer'
+import { CampaignReel } from '@/components/media/CampaignVideos'
+import { CaseStudyHero } from '@/components/sections/CaseStudyHero'
 import { FinalCTA } from '@/components/sections/FinalCTA'
 import { getCaseStudies, getCaseStudyBySlug } from '@/lib/cms'
 
@@ -43,19 +44,14 @@ export default async function CaseStudyPage({ params }: Props) {
     .slice(0, 3)
 
   const isInfluencer = study.type === 'influencer'
-  const meta = isInfluencer
-    ? [
-        { label: 'Creator', value: study.influencer?.handle },
-        { label: 'Platform', value: study.influencer?.platform },
-        { label: 'Followers', value: study.influencer?.followers },
-        { label: 'Brand Partner', value: study.influencer?.brandPartner },
-      ]
-    : [
-        { label: 'Client', value: study.client },
-        { label: 'Industry', value: study.industry },
-        { label: 'Network', value: study.network },
-        { label: 'Duration', value: study.duration },
-      ]
+  /* Only the affiliate hero renders this card; the influencer one carries its
+     own facts row. */
+  const meta = [
+    { label: 'Client', value: study.client },
+    { label: 'Industry', value: study.industry },
+    { label: 'Network', value: study.network },
+    { label: 'Duration', value: study.duration },
+  ]
 
   const sections = [
     { label: 'Overview', text: study.overview },
@@ -68,71 +64,64 @@ export default async function CaseStudyPage({ params }: Props) {
     <>
       <article>
         {/* ── Hero ─────────────────────────────────────── */}
-        <section className="relative overflow-hidden pt-32 pb-14 md:pt-40">
-          <div className="mesh-bg absolute inset-0" />
-          <div className="grid-fade absolute inset-0" />
-          <div className="container-x relative">
-            <Reveal>
-              <Link
-                href={isInfluencer ? '/case-studies/influencer-marketing' : '/case-studies/affiliate-marketing'}
-                className="inline-flex items-center gap-2 text-sm font-medium text-ink-500 transition-colors hover:text-brand-600"
-              >
-                <ArrowLeft className="h-4 w-4" />
-                {isInfluencer ? 'Influencer case studies' : 'Affiliate case studies'}
-              </Link>
-            </Reveal>
-            <Reveal delay={0.08}>
-              <div className="mt-7 flex flex-wrap items-center gap-2.5">
-                <span
-                  className={`rounded-full px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-white ${
-                    isInfluencer ? 'bg-fuchsia-500' : 'bg-brand-500'
-                  }`}
+        {/* Influencer case studies lead with the campaign's own videos; affiliate
+            ones have none, so they keep the light hero and its facts card. */}
+        {isInfluencer ? (
+          <CaseStudyHero study={study} />
+        ) : (
+          <section className="relative overflow-hidden pt-32 pb-14 md:pt-40">
+            <div className="mesh-bg absolute inset-0" />
+            <div className="grid-fade absolute inset-0" />
+            <div className="container-x relative">
+              <Reveal>
+                <Link
+                  href="/case-studies/affiliate-marketing"
+                  className="inline-flex items-center gap-2 text-sm font-medium text-ink-500 transition-colors hover:text-brand-600"
                 >
-                  {isInfluencer ? 'Influencer Marketing' : 'Affiliate Marketing'}
-                </span>
-                {study.category && (
-                  <Link
-                    href={`/case-studies/category/${study.category.slug}`}
-                    className="rounded-full border border-line bg-white px-3.5 py-1.5 text-xs font-semibold text-ink-700 transition-colors hover:border-brand-300 hover:text-brand-600"
-                  >
-                    {study.category.name}
-                  </Link>
-                )}
-              </div>
-            </Reveal>
-            <Reveal delay={0.14}>
-              <h1 className="heading mt-6 max-w-4xl text-3xl leading-[1.12] sm:text-4xl md:text-5xl">
-                {study.title}
-              </h1>
-            </Reveal>
+                  <ArrowLeft className="h-4 w-4" />
+                  Affiliate case studies
+                </Link>
+              </Reveal>
+              <Reveal delay={0.08}>
+                <div className="mt-7 flex flex-wrap items-center gap-2.5">
+                  <span className="rounded-full bg-brand-500 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-white">
+                    Affiliate Marketing
+                  </span>
+                  {study.category && (
+                    <Link
+                      href={`/case-studies/category/${study.category.slug}`}
+                      className="rounded-full border border-line bg-white px-3.5 py-1.5 text-xs font-semibold text-ink-700 transition-colors hover:border-brand-300 hover:text-brand-600"
+                    >
+                      {study.category.name}
+                    </Link>
+                  )}
+                </div>
+              </Reveal>
+              <Reveal delay={0.14}>
+                <h1 className="heading mt-6 max-w-4xl text-3xl leading-[1.12] sm:text-4xl md:text-5xl">
+                  {study.title}
+                </h1>
+              </Reveal>
 
-            <Reveal delay={0.2}>
-              <div className="card mt-10 grid grid-cols-2 gap-x-6 gap-y-5 p-7 md:grid-cols-4">
-                {meta
-                  .filter((m) => m.value)
-                  .map((m) => (
-                    <div key={m.label}>
-                      <p className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-ink-400">
-                        {m.label}
-                      </p>
-                      <p className="mt-1.5 text-sm font-semibold capitalize text-ink-950">{m.value}</p>
-                    </div>
-                  ))}
-                {isInfluencer && study.influencer?.brandUrl && (
-                  <a
-                    href={study.influencer.brandUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="col-span-2 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600 md:col-span-4"
-                  >
-                    <Globe className="h-4 w-4" /> Visit brand website
-                    <ArrowUpRight className="h-3.5 w-3.5" />
-                  </a>
-                )}
-              </div>
-            </Reveal>
-          </div>
-        </section>
+              <Reveal delay={0.2}>
+                <div className="card mt-10 grid grid-cols-2 gap-x-6 gap-y-5 p-7 md:grid-cols-4">
+                  {meta
+                    .filter((m) => m.value)
+                    .map((m) => (
+                      <div key={m.label}>
+                        <p className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-ink-400">
+                          {m.label}
+                        </p>
+                        <p className="mt-1.5 text-sm font-semibold capitalize text-ink-950">
+                          {m.value}
+                        </p>
+                      </div>
+                    ))}
+                </div>
+              </Reveal>
+            </div>
+          </section>
+        )}
 
         {/* ── Metrics ──────────────────────────────────── */}
         {study.metrics.length > 0 && (
@@ -229,38 +218,28 @@ export default async function CaseStudyPage({ params }: Props) {
         )}
 
         {/* ── Campaign videos ──────────────────────────── */}
+        {/* The carousel's outer cards lean past the container on purpose, so the
+            section clips them rather than letting them widen the page. */}
         {study.videos.length > 0 && (
-          <section className="section-alt py-16 md:py-24">
+          <section className="section-alt overflow-hidden py-16 md:py-24">
             <div className="container-x">
               <SectionHeading
                 eyebrow="Campaign content"
                 title={
                   <>
-                    Watch the <span className="text-gradient">creative in action</span>
+                    Real creators, <span className="text-gradient">real product moments.</span>
                   </>
                 }
+                subtitle={
+                  study.videos.length > 1
+                    ? 'Pick any video to bring it forward, then click it to watch with sound. On a phone, swipe with your thumb or use the arrows.'
+                    : 'Click to watch with sound.'
+                }
               />
-              <Stagger
-                className={`grid gap-6 ${
-                  study.videos.length === 1
-                    ? 'mx-auto max-w-sm'
-                    : study.videos.length === 2
-                      ? 'mx-auto max-w-3xl sm:grid-cols-2'
-                      : 'sm:grid-cols-2 lg:grid-cols-3'
-                }`}
-                gap={0.1}
-              >
-                {study.videos.map((v, i) => (
-                  <StaggerItem key={i}>
-                    <div>
-                      <VideoPlayer video={v} className="aspect-[9/16]" />
-                      {v.caption && (
-                        <p className="mt-3 text-center text-sm text-ink-400">{v.caption}</p>
-                      )}
-                    </div>
-                  </StaggerItem>
-                ))}
-              </Stagger>
+              <CampaignReel
+                videos={study.videos}
+                brand={study.influencer?.brandPartner || study.client}
+              />
             </div>
           </section>
         )}

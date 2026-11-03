@@ -196,6 +196,67 @@ export interface CaseStudy {
     brandUrl?: string | null;
   };
   /**
+   * The dark hero at the very top of the case study: headline, intro, two buttons and the fanned stack of campaign videos on the right. Every field is optional — anything left blank falls back to the case study title, overview and the site defaults. Keep to the character counts so nothing wraps awkwardly on a laptop.
+   */
+  hero?: {
+    /**
+     * Small pill above the headline, e.g. "Brand Ambassador Program". 2–4 words, 18–34 characters.
+     */
+    eyebrow?: string | null;
+    /**
+     * e.g. "Your". 4–30 characters.
+     */
+    headlineStart?: string | null;
+    /**
+     * Shown in italic gradient, e.g. "creator-led". 1–3 words, 8–22 characters.
+     */
+    headlineAccent?: string | null;
+    /**
+     * e.g. "content engine, built to drive sales." 15–50 characters. The whole headline reads best at 45–70 characters.
+     */
+    headlineEnd?: string | null;
+    /**
+     * Two or three lines under the headline. 130–210 characters — longer than that pushes the buttons below the fold on a laptop.
+     */
+    description?: string | null;
+    /**
+     * 10–22 characters.
+     */
+    primaryCtaLabel?: string | null;
+    /**
+     * Leave blank to use the Calendly booking link.
+     */
+    primaryCtaUrl?: string | null;
+    /**
+     * 10–24 characters.
+     */
+    secondaryCtaLabel?: string | null;
+    /**
+     * Leave blank to use /case-studies.
+     */
+    secondaryCtaUrl?: string | null;
+    /**
+     * Sits beside the client faces and the five stars. 30–55 characters. Clear it to hide that row.
+     */
+    trustNote?: string | null;
+    /**
+     * Up to 3 numbers under the buttons. Leave empty to show the campaign facts (creator, platform, followers, brand) instead.
+     */
+    stats?:
+      | {
+          /**
+           * e.g. "30.7x". 2–8 characters.
+           */
+          value: string;
+          /**
+           * e.g. "Campaign ROAS". 10–26 characters.
+           */
+          label: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  /**
    * Headline numbers shown in the results band, e.g. Revenue / $23,966 / +130%.
    */
   metrics?:
@@ -235,7 +296,7 @@ export interface CaseStudy {
    */
   resultsImage?: (string | null) | Media;
   /**
-   * Upload one or more campaign videos, or embed from YouTube/Instagram/TikTok.
+   * Upload one or more campaign videos, or embed from YouTube/Instagram/TikTok. The first three fan out in the hero and the rest rotate in behind them; all of them appear in the carousel further down the page.
    */
   videos?:
     | {
@@ -245,6 +306,29 @@ export interface CaseStudy {
          * YouTube / Instagram / TikTok link
          */
         embedUrl?: string | null;
+        /**
+         * Still shown before the video plays. Portrait 9:16 (1080 × 1920) looks best. Uploads fall back to their own first frame; embeds show a dark tile without one, so a poster matters most there.
+         */
+        poster?: (string | null) | Media;
+        /**
+         * Creator handle, e.g. @lighttherapyathome. Up to 24 characters.
+         */
+        handle?: string | null;
+        /**
+         * Puts the platform logo in the card corner.
+         */
+        platform?: ('instagram' | 'tiktok' | 'youtube') | null;
+        /**
+         * e.g. "Health & Wellness". Up to 26 characters.
+         */
+        niche?: string | null;
+        /**
+         * e.g. "658K views". Up to 14 characters.
+         */
+        views?: string | null;
+        /**
+         * Optional one-liner. Up to 70 characters.
+         */
         caption?: string | null;
         id?: string | null;
       }[]
@@ -755,6 +839,27 @@ export interface CaseStudiesSelect<T extends boolean = true> {
         brandPartner?: T;
         brandUrl?: T;
       };
+  hero?:
+    | T
+    | {
+        eyebrow?: T;
+        headlineStart?: T;
+        headlineAccent?: T;
+        headlineEnd?: T;
+        description?: T;
+        primaryCtaLabel?: T;
+        primaryCtaUrl?: T;
+        secondaryCtaLabel?: T;
+        secondaryCtaUrl?: T;
+        trustNote?: T;
+        stats?:
+          | T
+          | {
+              value?: T;
+              label?: T;
+              id?: T;
+            };
+      };
   metrics?:
     | T
     | {
@@ -782,6 +887,11 @@ export interface CaseStudiesSelect<T extends boolean = true> {
         source?: T;
         video?: T;
         embedUrl?: T;
+        poster?: T;
+        handle?: T;
+        platform?: T;
+        niche?: T;
+        views?: T;
         caption?: T;
         id?: T;
       };

@@ -5,8 +5,12 @@ import type { VideoItem } from '@/lib/cms'
 import { Play } from 'lucide-react'
 import { useState } from 'react'
 
+/* Only the playable parts, so a caller can hand over a review or any other
+   shape without inventing the campaign-video fields it has no use for. */
+type PlayableVideo = Pick<VideoItem, 'source' | 'media' | 'embedUrl' | 'caption'>
+
 /** Renders an uploaded video file or a social embed (YouTube / IG / TikTok). */
-export function VideoPlayer({ video, className }: { video: VideoItem; className?: string }) {
+export function VideoPlayer({ video, className }: { video: PlayableVideo; className?: string }) {
   const [activated, setActivated] = useState(false)
 
   const shell = 'overflow-hidden rounded-xl border border-line bg-surface-3'
