@@ -131,3 +131,69 @@
     transition: none;
   }
 }
+
+/* ── Phone hero previews ─────────────────────────────────────
+   Three overlapped thumbnails inside the hero copy, the middle one larger and
+   lifted. Everything is inside the query so nothing below exists at all from
+   48rem up, where the fanned stack is still the hero's video. */
+@media (width < 48rem) {
+  .cs-peek {
+    --cs-peek-lap: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 100%;
+    /* Room for the middle card's lift, which transform leaves out of layout. */
+    padding-top: 6px;
+  }
+
+  .cs-peek-card {
+    --cs-peek-w: clamp(84px, 26vw, 112px);
+    position: relative;
+    flex: 0 0 auto;
+    z-index: 1;
+    width: var(--cs-peek-w);
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 16px;
+    background: var(--color-ink-900);
+    box-shadow: 0 16px 32px -16px rgba(0, 0, 0, 0.85);
+  }
+
+  /* Each card tucks under the one before it, which is what makes the row read
+     as a single group rather than three separate thumbnails. */
+  .cs-peek-card + .cs-peek-card {
+    margin-left: calc(var(--cs-peek-lap) * -1);
+  }
+
+  .cs-peek-card[data-featured] {
+    --cs-peek-w: clamp(124px, 38vw, 164px);
+    z-index: 2;
+    border-radius: 20px;
+    border-color: rgba(255, 255, 255, 0.26);
+    box-shadow: 0 22px 44px -18px rgba(0, 0, 0, 0.9);
+    transform: translateY(-6px);
+  }
+
+  /* The card before the middle one runs under it, so its corner is not where
+     its own right edge is. */
+  .cs-peek-card[data-under] .cs-peek-time {
+    right: calc(6px + var(--cs-peek-lap));
+  }
+
+  .cs-peek-time {
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+    border-radius: 7px;
+    background: rgba(10, 10, 26, 0.72);
+    padding: 2px 6px;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: #fff;
+    backdrop-filter: blur(4px);
+  }
+}

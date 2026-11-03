@@ -1,7 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight, ArrowUpRight, Globe, Star } from 'lucide-react'
-import { HeroVideoStack } from '@/components/media/CampaignVideos'
+import { HeroVideoPreviews, HeroVideoStack } from '@/components/media/CampaignVideos'
+import { ClampText } from '@/components/ui/ClampText'
 import { Reveal } from '@/components/ui/Reveal'
 import { site } from '@/lib/site'
 import type { CaseStudyItem } from '@/lib/cms'
@@ -45,12 +46,14 @@ export function CaseStudyHero({ study }: { study: CaseStudyItem }) {
         .filter((s): s is { value: string; label: string } => Boolean(s.value))
         .slice(0, 3)
 
+  /* Phones trade a little of the hero's air for the preview row below the
+     description; from md up every spacing value below is the original. */
   return (
-    <section className="relative overflow-hidden bg-ink-950 pb-16 pt-32 md:pb-20 md:pt-40">
+    <section className="relative overflow-hidden bg-ink-950 pb-16 pt-28 md:pb-20 md:pt-40">
       <div className="mesh-dark absolute inset-0" />
 
-      <div className="container-x relative grid items-center gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-14">
-        <div className="flex flex-col items-start gap-6">
+      <div className="container-x relative grid items-center gap-9 md:gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-14">
+        <div className="flex flex-col items-start gap-5 md:gap-6">
           <Reveal>
             <Link
               href="/case-studies/influencer-marketing"
@@ -96,9 +99,24 @@ export function CaseStudyHero({ study }: { study: CaseStudyItem }) {
 
           {description && (
             <Reveal delay={0.18}>
-              <p className="max-w-[34rem] text-pretty text-base leading-relaxed text-white/65 sm:text-lg">
-                {description}
-              </p>
+              <ClampText
+                text={description}
+                className="max-w-[34rem]"
+                pClassName="text-pretty text-base leading-relaxed text-white/65 sm:text-lg"
+              />
+            </Reveal>
+          )}
+
+          {/* Phone-only: the campaign's creators, met before the first scroll.
+              The fanned stack below is still the hero's video from md up — and
+              md:hidden sits on the wrapper too, since an empty flex child would
+              otherwise still take a gap from the column. */}
+          {study.videos.length > 0 && (
+            <Reveal delay={0.21} className="w-full md:hidden">
+              <HeroVideoPreviews
+                videos={study.videos}
+                brand={study.influencer?.brandPartner || study.client}
+              />
             </Reveal>
           )}
 

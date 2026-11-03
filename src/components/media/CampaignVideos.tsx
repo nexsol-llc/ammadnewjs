@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { ChevronLeft, ChevronRight, Globe, Play, X } from 'lucide-react'
 import { InstagramIcon, TiktokIcon, YoutubeIcon } from '@/components/ui/BrandIcons'
@@ -345,6 +345,125 @@ export function HeroVideoStack({ videos, brand }: { videos: VideoItem[]; brand?:
           </button>
         )
       })}
+      {open && (
+        <Overlay>
+          <VideoModal video={open} brand={brand} onClose={() => setOpen(null)} />
+        </Overlay>
+      )}
+    </div>
+  )
+}
+
+/* ── Mobile hero previews ───────────────────────────────────── */
+
+const clock = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`
+
+/**
+ * One thumbnail in the phone row, with its own length in the corner.
+ *
+ * The CMS has no duration field, so it comes off the file's metadata. A
+ * poster-less clip already has a `preload="metadata"` <video> standing in as
+ * its still, so that element is reused and nothing extra is fetched; only a
+ * clip showing a poster image needs an element of its own. An embed's length
+ * lives on the platform, so it goes without.
+ */
+function PeekCard({
+  video,
+  featured,
+  under,
+  onOpen,
+}: {
+  video: VideoItem
+  featured: boolean
+  /** This card runs beneath the middle one, which its corner badge must dodge. */
+  under: boolean
+  onOpen: () => void
+}) {
+  const root = useRef<HTMLButtonElement>(null)
+  const [time, setTime] = useState<string>()
+
+  useEffect(() => {
+    const file = fileOf(video)
+    if (!file) return
+    const inDom = root.current?.querySelector('video')
+    const el = inDom || document.createElement('video')
+    let live = true
+    const read = () => {
+      if (live && Number.isFinite(el.duration) && el.duration > 0) setTime(clock(el.duration))
+    }
+    el.addEventListener('loadedmetadata', read)
+    if (el.readyState >= 1) read()
+    if (!inDom) {
+      el.preload = 'metadata'
+      el.muted = true
+      el.src = file
+    }
+    return () => {
+      live = false
+      el.removeEventListener('loadedmetadata', read)
+      if (!inDom) {
+        el.removeAttribute('src')
+        el.load()
+      }
+    }
+  }, [video])
+
+  return (
+    <button
+      ref={root}
+      type="button"
+      data-featured={featured || undefined}
+      data-under={under || undefined}
+      onClick={onOpen}
+      aria-label={`Watch ${nameOf(video)}`}
+      className="cs-peek-card"
+    >
+      <Still video={video} className="absolute inset-0 h-full w-full object-cover" />
+      <PlayMark size={featured ? 40 : 30} />
+      {time && <span className="cs-peek-time">{time}</span>}
+    </button>
+  )
+}
+
+/**
+ * Three of the campaign's own videos, overlapped, sat in the hero copy between
+ * the description and the calls to action — so a phone meets the creators
+ * before it has to scroll.
+ *
+ * Phones only. Above 48rem the fanned `HeroVideoStack` is already the hero's
+ * video, so this renders nothing there and fetches nothing either; the layout
+ * itself lives behind the same breakpoint in `case-study-media.css`.
+ */
+export function HeroVideoPreviews({ videos, brand }: { videos: VideoItem[]; brand?: string }) {
+  const [wide, setWide] = useState(false)
+  const [open, setOpen] = useState<VideoItem | null>(null)
+  const picks = useMemo(() => videos.slice(0, 3), [videos])
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 48rem)')
+    const sync = () => setWide(mq.matches)
+    sync()
+    mq.addEventListener('change', sync)
+    return () => mq.removeEventListener('change', sync)
+  }, [])
+
+  if (wide || !picks.length) return null
+
+  /* Two videos have no middle to lift, so neither takes the big slot; one
+     stands alone and does. */
+  const featured = picks.length === 2 ? -1 : Math.floor(picks.length / 2)
+
+  return (
+    <div className="cs-peek md:hidden">
+      {picks.map((video, i) => (
+        <PeekCard
+          key={`${video.id}-${i}`}
+          video={video}
+          featured={i === featured}
+          under={i === featured - 1}
+          onOpen={() => setOpen(video)}
+        />
+      ))}
       {open && (
         <Overlay>
           <VideoModal video={open} brand={brand} onClose={() => setOpen(null)} />
